@@ -1,0 +1,1 @@
+export const SUPPORT_WHATSAPP = "254768054542";
