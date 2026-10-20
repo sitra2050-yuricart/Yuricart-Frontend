@@ -1,0 +1,15 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "chore/add-ci-malware-workflows",
+    "main"
+  ],
+  "parent": {
+    "chore/add-ci-malware-workflows": "main",
+    "main": null
+  },
+  "order": [
+    "main",
+    "chore/add-ci-malware-workflows"
+  ]
+}
