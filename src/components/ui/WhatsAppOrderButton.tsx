@@ -24,7 +24,7 @@ export default function WhatsAppOrderButton({
 
   const message = `Hi, I want to order this product:\n\n*${productName}*\nQuantity: ${quantity}\nSale Price: ${totalPrice}\n${productUrl}`;
 
-  const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+  const waLink = `https://wa.me/${phoneNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
     message,
   )}`;
 

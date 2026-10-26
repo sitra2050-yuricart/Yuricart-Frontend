@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { CartDrawerProvider } from "@/components/ui/CartDrawerContext";
+import WhatsAppSettingsProvider from "@/components/WhatsAppSettingsProvider";
 
 type AppChromeProps = {
   children: React.ReactNode;
@@ -25,11 +26,13 @@ export default function AppChrome({
   }
 
   return (
-    <CartDrawerProvider>
-      {navbar}
-      <div className="min-h-[50vh]">{children}</div>
-      {footer}
-      {whatsapp}
-    </CartDrawerProvider>
+    <WhatsAppSettingsProvider>
+      <CartDrawerProvider>
+        {navbar}
+        <div className="min-h-[50vh]">{children}</div>
+        {footer}
+        {whatsapp}
+      </CartDrawerProvider>
+    </WhatsAppSettingsProvider>
   );
 }

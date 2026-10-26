@@ -16,6 +16,7 @@ import { LegacyProductDetail } from "@/lib/api/adapters";
 import { Product } from "@/lib/api/types";
 import { getProductEffectivePrice } from "@/lib/api/product-utils";
 import { trackViewContent } from "@/lib/metaPixel";
+import { useWhatsAppNumber } from "@/components/WhatsAppSettingsProvider";
 
 interface ProductDetailsProps {
   product: LegacyProductDetail;
@@ -26,6 +27,7 @@ export default function ProductDetails({
   product,
   apiProduct,
 }: ProductDetailsProps) {
+  const whatsappNumber = useWhatsAppNumber();
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -157,7 +159,7 @@ export default function ProductDetails({
 
             <div className="whitespace-nowrap">
               <WhatsAppOrderButton
-                phoneNumber="+254768054542"
+                phoneNumber={whatsappNumber}
                 productName={product.name ?? "Unnamed Product"}
                 productUrl={`https://www.yuricart.com/products/${product.slug}`}
                 quantity={quantity}

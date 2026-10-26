@@ -1,4 +1,10 @@
+"use client";
+
+import { useWhatsAppNumber } from "@/components/WhatsAppSettingsProvider";
+
 export default function Footer() {
+  const whatsappNumber = useWhatsAppNumber();
+
   return (
     <footer className="bg-[#F4F4F4] py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -13,7 +19,7 @@ export default function Footer() {
               Bazaar plaza along Moi Avenue, 1st floor A02
             </p>
             <a
-              href="https://wa.me/254768054542"
+              href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}`}
               className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#1ebe57]"
               target="_blank"
               rel="noopener noreferrer"

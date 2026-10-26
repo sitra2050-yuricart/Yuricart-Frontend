@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { trackLead } from "@/lib/metaPixel";
-
-const WHATSAPP_URL =
-  "https://wa.me/254768054542?text=" +
-  encodeURIComponent("Hello, I need help with a product on Yuricart.");
+import { useWhatsAppNumber } from "@/components/WhatsAppSettingsProvider";
 
 export default function WhatsAppButton() {
   const [mounted, setMounted] = useState(false);
+  const whatsappNumber = useWhatsAppNumber();
 
   useEffect(() => {
     setMounted(true);
@@ -16,9 +14,13 @@ export default function WhatsAppButton() {
 
   if (!mounted) return null;
 
+  const waLink = `https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(
+    "Hello, I need help with a product on Yuricart.",
+  )}`;
+
   return (
     <a
-      href={WHATSAPP_URL}
+      href={waLink}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"

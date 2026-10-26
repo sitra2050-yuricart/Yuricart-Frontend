@@ -1,3 +1,6 @@
+"use client";
+
+import { useWhatsAppNumber } from "@/components/WhatsAppSettingsProvider";
 import { cn, formatCurrency } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import Link from "next/link";
@@ -10,6 +13,7 @@ interface OrderProps {
 }
 
 export default function Order({ order }: OrderProps) {
+  const whatsappNumber = useWhatsAppNumber();
   const paymentStatusMap: Record<string, string> = {
     paid: "Paid",
     pending: "Pending",
@@ -34,7 +38,7 @@ export default function Order({ order }: OrderProps) {
           <span>{formatDate(new Date(order.createdAt), "MMM d, yyyy")}</span>
         )}
         <Link
-          href={`https://wa.me/254768054542?text=${encodeURIComponent(`I need help with order #${order.orderNumber}`)}`}
+          href={`https://wa.me/${whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(`I need help with order #${order.orderNumber}`)}`}
           className="ms-auto text-sm hover:underline"
         >
           Need help?

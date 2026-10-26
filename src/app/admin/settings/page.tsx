@@ -30,12 +30,11 @@ export default function AdminSettingsPage() {
     e.preventDefault();
     try {
       await updateAdminSettings({
-        group: "general",
-        settings: {
-          storeName,
-          whatsappNumber,
-          shippingRate,
-        },
+        settings: [
+          { key: "storeName", value: storeName, group: "general" },
+          { key: "whatsappNumber", value: whatsappNumber, group: "general" },
+          { key: "shippingRate", value: shippingRate, group: "general" },
+        ],
       });
       toast({ title: "Settings saved" });
     } catch (error) {
