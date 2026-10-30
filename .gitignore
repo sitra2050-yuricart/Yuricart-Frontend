@@ -38,3 +38,5 @@ temp_interactive_push.bat
 config.bat
 .env*.local
 .env
+branch_structure.json
+.gitignore
