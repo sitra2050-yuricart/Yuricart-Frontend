@@ -163,13 +163,7 @@ export default function ProductDetails({
                 productName={product.name ?? "Unnamed Product"}
                 productUrl={`https://www.yuricart.com/products/${product.slug}`}
                 quantity={quantity}
-                salePrice={
-                  (selectedVariant as { priceData?: { discountedPrice?: number; price?: number } })?.priceData?.discountedPrice ??
-                  (product as { priceData?: { discountedPrice?: number; price?: number } })?.priceData?.discountedPrice ??
-                  (selectedVariant as { priceData?: { price?: number } })?.priceData?.price ??
-                  (product as { priceData?: { price?: number } })?.priceData?.price ??
-                  0
-                }
+                salePrice={getProductEffectivePrice(apiProduct)}
               />
             </div>
           </div>
