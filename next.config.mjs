@@ -1,3 +1,4 @@
+// Clean redeploy after malware removal (2026-11-18).
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
