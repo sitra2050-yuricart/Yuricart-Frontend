@@ -59,6 +59,38 @@ http
       return res.end(JSON.stringify({ success: false, message: "No redirect for that path" }));
     }
 
+    // Auth endpoints (POST): deterministic answers for the form tests.
+    if (req.method === "POST" && p.startsWith("/auth/")) {
+      let raw = "";
+      req.on("data", (chunk) => (raw += chunk));
+      req.on("end", () => {
+        const input = raw ? JSON.parse(raw) : {};
+        const fail = (status, message) => {
+          res.statusCode = status;
+          res.end(JSON.stringify({ success: false, message }));
+        };
+        if (p === "/auth/forgot-password") {
+          return res.end(JSON.stringify(ok({ message: "If an account exists, we sent a link." })));
+        }
+        if (p === "/auth/reset-password") {
+          if (String(input.token).startsWith("expired")) {
+            return fail(400, "This reset link is invalid or has expired. Request a new one.");
+          }
+          return res.end(JSON.stringify(ok({ message: "Your password has been changed." })));
+        }
+        if (p === "/auth/login") {
+          if (input.password === "wrong-password") return fail(401, "Invalid email or password");
+          return res.end(JSON.stringify(ok({ token: "t", user: { id: "u1", name: "Amina", email: input.email, role: "customer" } })));
+        }
+        if (p === "/auth/register") {
+          if (input.email === "taken@example.com") return fail(400, "Email already registered");
+          return res.end(JSON.stringify(ok({ token: "t", user: { id: "u2", name: input.name, email: input.email, role: "customer" } })));
+        }
+        return fail(404, "not found");
+      });
+      return;
+    }
+
     if (p === "/settings") body = ok({ whatsappNumber: "254768054542", shippingRate: 500 });
     else if (p === "/categories") body = ok(cats, { page: 1, limit: 100, total: cats.length, totalPages: 1 });
     else if (/^\/categories\/[^/]+\/products$/.test(p) || p === "/products") {
