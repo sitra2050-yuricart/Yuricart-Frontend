@@ -16,6 +16,8 @@ type ProductImageProps = {
   fill?: boolean;
   sizes?: string;
   priority?: boolean;
+  /** Force eager fetching (e.g. to warm the cache for gallery images). */
+  loading?: "eager" | "lazy";
   quality?: number;
 };
 
@@ -33,6 +35,7 @@ export default function ProductImage({
   fill = false,
   sizes,
   priority = false,
+  loading,
   quality = 75,
 }: ProductImageProps) {
   const rawUrl = src || mediaIdentifier || placeholder;
@@ -55,6 +58,7 @@ export default function ProductImage({
         fill
         sizes={resolvedSizes}
         priority={priority}
+        loading={priority ? undefined : loading}
         quality={quality}
         className={cn("object-cover", className)}
       />
@@ -69,6 +73,7 @@ export default function ProductImage({
       height={height}
       sizes={resolvedSizes}
       priority={priority}
+      loading={priority ? undefined : loading}
       quality={quality}
       className={className}
     />
