@@ -142,6 +142,61 @@ http
       });
       return;
     }
+    if (req.method === "GET" && p.startsWith("/orders/track/") && url.searchParams.get("token")) {
+      // emailed link: a "good-token" opens a fixed shipped order, anything else is rejected
+      if (url.searchParams.get("token") !== "good-token") {
+        res.statusCode = 404;
+        return res.end(JSON.stringify({ success: false, message: "Order not found" }));
+      }
+      return res.end(
+        JSON.stringify(
+          ok({
+            orderNumber: p.split("/").pop(),
+            customerName: "Amina",
+            email: "amina@example.com",
+            phone: "0712345678",
+            address: "Moi Avenue 1",
+            city: "Nairobi",
+            items: [],
+            total: 1000,
+            shipping: 0,
+            paymentStatus: "pending",
+            orderStatus: "shipped",
+          }),
+        ),
+      );
+    }
+    if (req.method === "GET" && p === "/auth/me") {
+      if (req.headers.authorization !== "Bearer test-customer") {
+        res.statusCode = 401;
+        return res.end(JSON.stringify({ success: false, message: "Invalid or expired token" }));
+      }
+      return res.end(
+        JSON.stringify(
+          ok({ id: "u1", name: "Amina Wanjiru", email: "amina@example.com", phone: "0712345678", role: "customer", emailVerified: true }),
+        ),
+      );
+    }
+    if (req.method === "GET" && p === "/orders/my") {
+      const line = (n, title, price) => ({ productId: "p" + n, title, quantity: 1, price, image: "" });
+      return res.end(
+        JSON.stringify(
+          ok([
+            {
+              _id: "o1", orderNumber: "YC-20261123-0001", customerName: "Amina Wanjiru", email: "amina@example.com",
+              phone: "0712345678", address: "Moi Avenue", city: "Nairobi", createdAt: "2026-11-23T10:00:00Z",
+              items: [line(1, "HP EliteBook 830 G5", 42000), line(2, "Laptop sleeve", 1500)],
+              subtotal: 43500, shipping: 500, discount: 0, total: 44000,
+              paymentMethod: "cod", paymentStatus: "pending", orderStatus: "shipped",
+            },
+          ]),
+        ),
+      );
+    }
+    if (req.method === "POST" && p === "/orders/lookup") {
+      globalThis.__lookupCalls = (globalThis.__lookupCalls || 0) + 1;
+      return res.end(JSON.stringify(ok({ message: "If we have orders for that email, we have sent the order numbers to it." })));
+    }
     if (req.method === "GET" && p.startsWith("/orders/track/")) {
       const order = globalThis.__lastOrder?.order;
       if (order && p.endsWith(order.orderNumber)) return res.end(JSON.stringify(ok(order)));
@@ -167,6 +222,12 @@ http
             return fail(400, "This reset link is invalid or has expired. Request a new one.");
           }
           return res.end(JSON.stringify(ok({ message: "Your password has been changed." })));
+        }
+        if (p === "/auth/verify-email") {
+          if (String(input.token).startsWith("expired")) {
+            return fail(400, "This confirmation link is invalid or has expired. Request a new one.");
+          }
+          return res.end(JSON.stringify(ok({ message: "Your email is confirmed." })));
         }
         if (p === "/auth/login") {
           if (input.password === "wrong-password") return fail(401, "Invalid email or password");

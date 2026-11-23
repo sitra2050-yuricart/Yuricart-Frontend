@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Check } from "lucide-react";
 import Breadcrumb from "@/components/listing/Breadcrumb";
 import Order from "@/components/Order";
 import { Field, FormError, SubmitButton } from "@/components/auth/Field";
-import { trackOrder } from "@/lib/api/orders";
+import { requestOrderNumbers, trackOrder } from "@/lib/api/orders";
 import { StorefrontApiError } from "@/lib/api/client";
 import type { Order as StorefrontOrder } from "@/lib/api/types";
 
@@ -64,12 +64,45 @@ export default function TrackOrderPage() {
   const [error, setError] = useState("");
   const [order, setOrder] = useState<StorefrontOrder | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
+  const [lostEmail, setLostEmail] = useState("");
+  const [lostPending, setLostPending] = useState(false);
+  const [lostMessage, setLostMessage] = useState("");
+
+  // A link from an email carries the order number and a token: open the order straight away.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const linkedOrder = params.get("orderNumber");
+    const token = params.get("token");
+    if (linkedOrder && token) {
+      setOrderNumber(linkedOrder);
+      void lookup(linkedOrder, { token });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function handleLost(e: React.FormEvent) {
     e.preventDefault();
+    setLostPending(true);
+    setLostMessage("");
+    try {
+      setLostMessage(await requestOrderNumbers(lostEmail.trim()));
+    } catch {
+      setLostMessage("We couldn't send that. Check your connection and try again.");
+    } finally {
+      setLostPending(false);
+    }
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    void lookup(orderNumber.trim(), { email: email.trim() });
+  }
+
+  async function lookup(number: string, access: { email?: string; token?: string }) {
     setError("");
     setPending(true);
     try {
-      setOrder(await trackOrder(orderNumber.trim(), email.trim()));
+      setOrder(await trackOrder(number, access));
     } catch (err) {
       setOrder(null);
       setError(
@@ -143,6 +176,34 @@ export default function TrackOrderPage() {
           </p>
         </section>
       ) : null}
+
+      <section aria-labelledby="lost-number" className="space-y-4 rounded-2xl bg-white p-6 ring-1 ring-gray-900/5 sm:p-8">
+        <header className="space-y-1">
+          <h2 id="lost-number" className="text-lg font-bold text-gray-900">
+            Can&apos;t find your order?
+          </h2>
+          <p className="text-sm text-gray-700">
+            Enter the email you ordered with and we will email you the orders placed with it, each with a link to track it.
+          </p>
+        </header>
+        <form onSubmit={handleLost} className="grid gap-4 sm:grid-cols-[1fr_auto] sm:items-end">
+          <Field
+            label="Send the list to"
+            type="email"
+            name="lostEmail"
+            autoComplete="email"
+            required
+            value={lostEmail}
+            onChange={(e) => setLostEmail(e.target.value)}
+          />
+          <SubmitButton pending={lostPending}>Email me my orders</SubmitButton>
+        </form>
+        {lostMessage ? (
+          <p role="status" className="rounded-xl bg-brand-soft px-4 py-3 text-sm text-primary">
+            {lostMessage}
+          </p>
+        ) : null}
+      </section>
     </main>
   );
 }

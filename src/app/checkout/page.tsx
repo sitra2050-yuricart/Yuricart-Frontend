@@ -13,6 +13,14 @@ import { StorefrontApiError } from "@/lib/api/client";
 import { isValidKenyanPhone } from "@/lib/phone";
 import { quoteShipping, type ShippingQuote } from "@/lib/api/shipping";
 import { useClearCart } from "@/hooks/cart";
+import useAuth from "@/hooks/auth";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -29,6 +37,8 @@ export default function CheckoutPage() {
   const items = useCartStore((s) => s.items);
   const subtotal = useCartStore((s) => s.getSubtotal());
   const clearCartMutation = useClearCart();
+  const { user } = useAuth();
+  const [choiceOpen, setChoiceOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [phoneError, setPhoneError] = useState("");
@@ -45,6 +55,17 @@ export default function CheckoutPage() {
     postalCode: "",
     notes: "",
   });
+
+  // Logged-in customers do not retype their details.
+  useEffect(() => {
+    if (!user) return;
+    setForm((f) => ({
+      ...f,
+      customerName: f.customerName || user.name || "",
+      email: f.email || user.email || "",
+      phone: f.phone || user.phone || "",
+    }));
+  }, [user]);
 
   const set =
     (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -88,7 +109,7 @@ export default function CheckoutPage() {
     );
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setFormError("");
 
@@ -98,6 +119,16 @@ export default function CheckoutPage() {
     }
     setPhoneError("");
 
+    // Not logged in: offer to log in or sign up first, or carry on as a guest.
+    if (!user && !getCustomerToken()) {
+      setChoiceOpen(true);
+      return;
+    }
+    void placeOrder();
+  }
+
+  async function placeOrder() {
+    setChoiceOpen(false);
     setPending(true);
 
     try {
@@ -298,6 +329,43 @@ export default function CheckoutPage() {
 
         <SubmitButton pending={pending}>Place order</SubmitButton>
       </form>
+
+      <Dialog open={choiceOpen} onOpenChange={setChoiceOpen}>
+        <DialogContent className="max-w-md rounded-2xl">
+          <DialogHeader className="space-y-2 text-left">
+            <DialogTitle className="text-xl font-bold text-gray-900">How would you like to order?</DialogTitle>
+            <DialogDescription className="text-gray-700">
+              With an account your orders are saved and you check out faster. As a guest we still email you a link to track this order.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Link
+              href="/login?next=/checkout"
+              className="flex h-11 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            >
+              Log in
+            </Link>
+            <Link
+              href="/register?next=/checkout"
+              className="flex h-11 w-full items-center justify-center rounded-full bg-white px-6 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/15 transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              Create an account
+            </Link>
+            <div className="flex items-center gap-3 text-xs text-gray-600" aria-hidden>
+              <span className="h-px flex-1 bg-gray-200" />
+              or
+              <span className="h-px flex-1 bg-gray-200" />
+            </div>
+            <button
+              type="button"
+              onClick={() => void placeOrder()}
+              className="flex h-11 w-full items-center justify-center rounded-full text-sm font-semibold text-primary transition hover:bg-brand-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              Continue as guest
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

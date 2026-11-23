@@ -7,10 +7,10 @@ import Image from "next/image";
 import SearchField from "@/components/SearchFiend";
 import MobileMenu from "@/app/MobileMenu";
 import MobileBottomNav from "@/components/ui/MobileBottomNav";
-import UserButton from "@/components/UserButton";
+import AccountMenu from "@/components/AccountMenu";
 import ShoppingCartButton from "@/app/ShoppingCartButton";
 import { Category } from "@/lib/api/types";
-import { Gift, ShoppingCart, ChevronDown } from "lucide-react";
+import { Gift, ShoppingCart } from "lucide-react";
 import { useCartDrawer } from "@/components/ui/CartDrawerContext";
 import { useCartStore } from "@/lib/cart/cart-store";
 import { useCartHydrated } from "@/hooks/useCartHydrated";
@@ -101,13 +101,7 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
                 <span className="ml-2 hidden lg:inline">Cart</span>
               </button>
 
-              <div className="flex items-center text-white">
-                <UserButton className="text-white hover:bg-white/10 hover:text-white" />
-                <span className="pointer-events-none hidden items-center gap-0.5 text-sm font-medium lg:inline-flex">
-                  Account
-                  <ChevronDown className="size-3.5 opacity-80" />
-                </span>
-              </div>
+              <AccountMenu variant="header" />
             </div>
           </div>
         </div>
