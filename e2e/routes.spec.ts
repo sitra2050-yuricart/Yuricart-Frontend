@@ -86,8 +86,8 @@ test("unknown URLs get a helpful 404 with search and categories", async ({ page 
 
 test("the login page keeps the standard header and footer", async ({ page }) => {
   await page.goto("/login");
-  await expect(page.locator("header")).toBeVisible();
-  await expect(page.locator("footer")).toBeVisible();
+  await expect(page.getByRole("banner")).toBeVisible();
+  await expect(page.getByRole("contentinfo")).toBeVisible();
 });
 
 test("offers lists only discounted products", async ({ page }) => {
