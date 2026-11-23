@@ -24,7 +24,7 @@ function LoginForm() {
       <AuthShell title="You are already logged in">
         <Link
           href={next}
-          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white transition hover:bg-[#002f5d]"
+          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90"
         >
           Continue
         </Link>
@@ -58,7 +58,7 @@ function LoginForm() {
           New to Yuricart?{" "}
           <Link
             href={next === "/profile" ? "/register" : `/register?next=${encodeURIComponent(next)}`}
-            className="font-semibold text-[#003B73] hover:underline"
+            className="font-semibold text-primary hover:underline"
           >
             Create an account
           </Link>
@@ -88,7 +88,7 @@ function LoginForm() {
         <div className="flex justify-end">
           <Link
             href="/forgot-password"
-            className="text-sm font-medium text-[#003B73] hover:underline"
+            className="text-sm font-medium text-primary hover:underline"
           >
             Forgot password?
           </Link>

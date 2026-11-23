@@ -22,7 +22,7 @@ function BannerLink({
   if (!item?.imageUrl) {
     return (
       <div
-        className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-[#e8eef5] ${className || ""}`}
+        className={`relative flex items-center justify-center overflow-hidden rounded-xl bg-brand-soft ${className || ""}`}
       />
     );
   }
@@ -68,7 +68,7 @@ export default function BannerGrid({ title, banners }: BannerGridProps) {
 
   return (
     <section className="space-y-4">
-      <h2 className="font-serif text-2xl font-bold text-gray-900 md:text-3xl">
+      <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
         {title}
       </h2>
       <div className="grid grid-cols-2 gap-2 sm:gap-3">

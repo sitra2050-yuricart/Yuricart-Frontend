@@ -61,7 +61,7 @@ function RegisterForm() {
           Already have an account?{" "}
           <Link
             href={next === "/profile" ? "/login" : `/login?next=${encodeURIComponent(next)}`}
-            className="font-semibold text-[#003B73] hover:underline"
+            className="font-semibold text-primary hover:underline"
           >
             Log in
           </Link>

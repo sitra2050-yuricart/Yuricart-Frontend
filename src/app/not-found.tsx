@@ -9,7 +9,7 @@ export default async function NotFound() {
   return (
     <main className="mx-auto max-w-2xl space-y-6 px-5 py-16 text-center">
       <div>
-        <p className="text-sm font-semibold text-[#003B73]">Error 404</p>
+        <p className="text-sm font-semibold text-primary">Error 404</p>
         <h1 className="mt-1 text-3xl font-bold text-gray-900">
           We couldn&apos;t find that page
         </h1>
@@ -27,7 +27,7 @@ export default async function NotFound() {
             <li key={category._id}>
               <Link
                 href={`/collections/${category.slug}`}
-                className="inline-block rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-[#003B73] hover:ring-[#003B73]/40"
+                className="inline-block rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-primary hover:ring-primary/40"
               >
                 {category.name}
               </Link>
@@ -39,13 +39,13 @@ export default async function NotFound() {
       <div className="flex flex-wrap justify-center gap-3">
         <Link
           href="/"
-          className="inline-flex h-11 items-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white transition hover:bg-[#002f5d]"
+          className="inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90"
         >
           Back to home
         </Link>
         <Link
           href="/shop"
-          className="inline-flex h-11 items-center rounded-full bg-white px-6 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-[#003B73]"
+          className="inline-flex h-11 items-center rounded-full bg-white px-6 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-primary"
         >
           Shop all products
         </Link>

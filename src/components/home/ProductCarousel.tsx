@@ -27,7 +27,7 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
   return (
     <section className="home-product-carousel space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-serif text-2xl font-bold text-gray-900 md:text-3xl">
+        <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
           {title}
         </h2>
         <div className="flex shrink-0 items-center gap-1.5">
@@ -35,7 +35,7 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
             type="button"
             ref={prevRef}
             aria-label="Previous products"
-            className="flex size-8 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 shadow-sm transition hover:border-[#003B73] hover:text-[#003B73] disabled:pointer-events-none disabled:opacity-40"
+            className="flex size-8 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 shadow-sm transition hover:border-primary hover:text-primary disabled:pointer-events-none disabled:opacity-40"
           >
             <ChevronLeft className="size-4" />
           </button>
@@ -43,7 +43,7 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
             type="button"
             ref={nextRef}
             aria-label="Next products"
-            className="flex size-8 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 shadow-sm transition hover:border-[#003B73] hover:text-[#003B73] disabled:pointer-events-none disabled:opacity-40"
+            className="flex size-8 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 shadow-sm transition hover:border-primary hover:text-primary disabled:pointer-events-none disabled:opacity-40"
           >
             <ChevronRight className="size-4" />
           </button>

@@ -250,12 +250,12 @@ export default function ProductDetails({
         {brandName && (
           <Link
             href={`/shop?q=${encodeURIComponent(brandName)}`}
-            className="inline-flex items-center rounded-full bg-[#003B73]/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#003B73] transition hover:bg-[#003B73]/10"
+            className="inline-flex items-center rounded-full bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary transition hover:bg-primary/10"
           >
             {brandName}
           </Link>
         )}
-        <h1 className="mt-2 font-serif text-2xl font-bold leading-snug tracking-tight text-gray-900 md:text-[1.7rem]">
+        <h1 className="mt-2 text-2xl font-bold leading-snug tracking-tight text-gray-900 md:text-[1.7rem]">
           {product.name}
         </h1>
 
@@ -307,7 +307,7 @@ export default function ProductDetails({
             <ul className="space-y-2 text-sm text-gray-800">
               {keySpecs.map((spec) => (
                 <li key={spec} className="flex items-start gap-2.5">
-                  <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-[#003B73]/10 text-[#003B73]">
+                  <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                     <Check className="size-3" strokeWidth={3} />
                   </span>
                   <span>{spec}</span>
@@ -334,12 +334,12 @@ export default function ProductDetails({
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Your location"
                 aria-label="Delivery location"
-                className="h-8 w-full rounded-full border border-gray-200 bg-white pl-8 pr-3 text-xs outline-none transition focus:border-[#003B73] focus:ring-2 focus:ring-[#003B73]/20"
+                className="h-8 w-full rounded-full border border-gray-200 bg-white pl-8 pr-3 text-xs outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </label>
           </div>
           <div className="flex items-center gap-3 p-3">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-[#003B73]/5 text-[#003B73]">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/5 text-primary">
               <Truck className="size-5" aria-hidden="true" />
             </span>
             <div className="flex flex-col leading-snug">
@@ -359,7 +359,7 @@ export default function ProductDetails({
           <div className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-orange-100/70">
             {warranty && (
               <div className="flex items-center gap-3 bg-orange-50 p-3">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-[#003B73] shadow-sm">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white text-primary shadow-sm">
                   <ShieldCheck className="size-5" aria-hidden="true" />
                 </span>
                 <div className="flex flex-col leading-tight">
@@ -392,7 +392,7 @@ export default function ProductDetails({
           {isOutOfStock ? (
             <BackInStockNotificationButton
               product={apiProduct}
-              className="h-12 w-full rounded-xl bg-[#003B73] text-[15px] font-semibold hover:bg-[#002f5c]"
+              className="h-12 w-full rounded-xl bg-primary text-[15px] font-semibold hover:bg-primary/90"
             />
           ) : priceUnavailable ? (
             <div className="fixed inset-x-0 bottom-[3.3rem] z-40 flex border-t border-gray-200 bg-white/95 p-2 shadow-[0_-8px_24px_-12px_rgba(16,24,40,0.25)] backdrop-blur md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
@@ -404,7 +404,7 @@ export default function ProductDetails({
                 salePrice={0}
                 enquiry
                 label="Ask for the price on WhatsApp"
-                className="h-12 w-full rounded-xl bg-[#1fa855] text-[15px] font-semibold shadow-sm hover:bg-[#188f48]"
+                className="h-12 w-full rounded-xl bg-whatsapp text-[15px] font-semibold shadow-sm hover:bg-whatsapp/90"
               />
             </div>
           ) : (
@@ -413,14 +413,14 @@ export default function ProductDetails({
                 product={apiProduct}
                 selectedOptions={selectedOptions}
                 quantity={quantity}
-                className={cn(BUY_BUTTON, "bg-[#003B73] hover:bg-[#002f5c]")}
+                className={cn(BUY_BUTTON, "bg-primary hover:bg-primary/90")}
               />
               <BuyNowButton
                 product={apiProduct}
                 selectedOptions={selectedOptions}
                 quantity={quantity}
                 variant="default"
-                className={cn(BUY_BUTTON, "bg-primary hover:bg-primary/90")}
+                className={cn(BUY_BUTTON, "bg-cta hover:bg-cta/90")}
               />
               <WhatsAppOrderButton
                 phoneNumber={whatsappNumber}
@@ -430,7 +430,7 @@ export default function ProductDetails({
                 salePrice={getProductEffectivePrice(apiProduct)}
                 deliveryLocation={location}
                 label="Buy on WhatsApp"
-                className="hidden h-12 w-full rounded-xl bg-[#1fa855] text-[15px] font-semibold shadow-sm hover:bg-[#188f48] md:flex"
+                className="hidden h-12 w-full rounded-xl bg-whatsapp text-[15px] font-semibold shadow-sm hover:bg-whatsapp/90 md:flex"
               />
             </div>
           )}
@@ -441,7 +441,7 @@ export default function ProductDetails({
                 key={text}
                 className="flex items-center gap-3 text-sm text-gray-700"
               >
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#003B73]/5 text-[#003B73]">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/5 text-primary">
                   <Icon className="size-4" aria-hidden="true" />
                 </span>
                 {text}

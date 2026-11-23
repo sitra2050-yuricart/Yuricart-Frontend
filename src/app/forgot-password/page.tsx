@@ -36,10 +36,10 @@ export default function ForgotPasswordPage() {
     return (
       <AuthShell
         title="Check your email"
-        footer={<Link href="/login" className="font-semibold text-[#003B73] hover:underline">Back to log in</Link>}
+        footer={<Link href="/login" className="font-semibold text-primary hover:underline">Back to log in</Link>}
       >
-        <div role="status" className="flex items-start gap-3 rounded-xl bg-[#eef3f9] p-4 text-sm text-gray-800">
-          <MailCheck className="mt-0.5 size-5 shrink-0 text-[#003B73]" aria-hidden />
+        <div role="status" className="flex items-start gap-3 rounded-xl bg-brand-soft p-4 text-sm text-gray-800">
+          <MailCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
           <p>
             If an account exists for <strong>{sentTo}</strong>, we have sent a link to reset the
             password. It works once and expires in 1 hour. Check your spam folder if it does not
@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
     <AuthShell
       title="Forgot your password?"
       subtitle="Enter your email and we will send you a link to choose a new one."
-      footer={<Link href="/login" className="font-semibold text-[#003B73] hover:underline">Back to log in</Link>}
+      footer={<Link href="/login" className="font-semibold text-primary hover:underline">Back to log in</Link>}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />

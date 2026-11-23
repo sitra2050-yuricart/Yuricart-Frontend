@@ -140,8 +140,8 @@ function MediaPreview({ mediaItem, isSelected, onSelect }: MediaPreviewProps) {
   return (
     <div
       className={cn(
-        "relative size-16 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:border-[#003B73]/50",
-        isSelected && "border-[#003B73] ring-2 ring-[#003B73]/30",
+        "relative size-16 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:border-primary/50",
+        isSelected && "border-primary ring-2 ring-primary/30",
       )}
       onMouseEnter={onSelect}
       onClick={onSelect}

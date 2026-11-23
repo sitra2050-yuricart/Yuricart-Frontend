@@ -30,7 +30,7 @@ export default function CategoryCircles({ categories }: CategoryCirclesProps) {
                   quality={75}
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center bg-[#e8eef5] text-xs font-semibold text-[#003B73]">
+                <div className="flex h-full w-full items-center justify-center bg-brand-soft text-xs font-semibold text-primary">
                   {cat.name.slice(0, 2).toUpperCase()}
                 </div>
               )}

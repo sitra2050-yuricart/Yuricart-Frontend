@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Source_Sans_3 } from "next/font/google";
+import { Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import FooterWithData from "./FooterWithData";
@@ -15,15 +15,6 @@ import { getSiteUrl } from "@/lib/seo";
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
   variable: "--font-sans",
-  display: "swap",
-  preload: true,
-  adjustFontFallback: true,
-});
-
-const libreBaskerville = Libre_Baskerville({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-serif",
   display: "swap",
   preload: true,
   adjustFontFallback: true,
@@ -108,7 +99,7 @@ export default function RootLayout({
         ) : null}
       </head>
       <body
-        className={`${sourceSans.variable} ${libreBaskerville.variable} font-sans antialiased`}
+        className={`${sourceSans.variable} font-sans antialiased`}
       >
         {metaPixelId ? (
           <noscript>
@@ -125,7 +116,7 @@ export default function RootLayout({
         <MetaPixel />
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          forcedTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >

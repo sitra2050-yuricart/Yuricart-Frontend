@@ -34,7 +34,7 @@ export default function ProductPrice({
 
   return (
     <div className="my-4 flex flex-wrap items-end gap-x-3 gap-y-1">
-      <p className="text-3xl font-extrabold leading-none tracking-tight text-[#003B73]">
+      <p className="text-3xl font-extrabold leading-none tracking-tight text-primary">
         {toKes(
           hasDiscount
             ? priceData.formatted?.discountedPrice
@@ -47,7 +47,7 @@ export default function ProductPrice({
             {toKes(priceData.formatted?.price)}
           </span>
           {discountValue ? (
-            <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-bold text-white">
+            <span className="rounded-full bg-cta px-2.5 py-0.5 text-xs font-bold text-white">
               -{discountValue}%
             </span>
           ) : null}

@@ -25,7 +25,7 @@ function HeroSlideContent({
 }) {
   const href = slide.link || "/shop";
   const image = (
-    <div className="relative aspect-[21/9] min-h-[160px] w-full bg-[#e8eef5] sm:min-h-[240px] md:min-h-[320px]">
+    <div className="relative aspect-[21/9] min-h-[160px] w-full bg-brand-soft sm:min-h-[240px] md:min-h-[320px]">
       <Image
         src={heroSrc(slide.imageUrl)}
         alt={
@@ -102,7 +102,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
 
   if (!activeSlides.length) {
     return (
-      <div className="flex h-[180px] items-center justify-center rounded-2xl bg-[#e8eef5] sm:h-[280px] md:h-[360px]">
+      <div className="flex h-[180px] items-center justify-center rounded-2xl bg-brand-soft sm:h-[280px] md:h-[360px]">
         <p className="text-sm text-muted-foreground">No hero banners yet</p>
       </div>
     );

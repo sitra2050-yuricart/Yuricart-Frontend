@@ -36,7 +36,7 @@ export default function PromoCards({ cards }: PromoCardsProps) {
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
       {items.map((card, index) => (
         <BannerLink key={card.slot || card.id || index} href={card.link || "/shop"}>
-          <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-[#e8eef5] transition-transform duration-300 hover:scale-[1.01]">
+          <div className="relative aspect-[16/9] overflow-hidden rounded-xl bg-brand-soft transition-transform duration-300 hover:scale-[1.01]">
             <Image
               src={optimizeCloudinaryUrl(card.imageUrl, { width: 800 })}
               alt={
