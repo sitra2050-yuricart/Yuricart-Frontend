@@ -1,23 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, MessageCircle, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import TrustBar from "./TrustBar";
+import JsonLd from "@/components/JsonLd";
+import { buildOrganizationJsonLd, buildWebSiteJsonLd } from "@/lib/seo";
 import ProductCard from "@/components/product/ProductCard";
 import { getNavCategories, getProducts } from "@/lib/api";
 import type { Category, Product } from "@/lib/api/types";
 import { SHOP_INFO } from "@/lib/shop-info";
-
-const TRUST = [
-  { icon: Truck, title: "Fast delivery", text: "Nairobi and countrywide" },
-  {
-    icon: ShieldCheck,
-    title: "Warranty on every laptop",
-    text: "Tested before it ships",
-  },
-  {
-    icon: MessageCircle,
-    title: "Order on WhatsApp",
-    text: "Pay on delivery or M-Pesa",
-  },
-];
 
 /**
  * Shown when the homepage data call fails. It makes its own small, independent
@@ -34,6 +23,8 @@ export default async function HomeFallback() {
 
   return (
     <main className="bg-surface">
+      <JsonLd data={buildOrganizationJsonLd()} />
+      <JsonLd data={buildWebSiteJsonLd()} />
       <div className="mx-auto max-w-[88rem] space-y-8 px-3 py-6 sm:px-5 md:py-10">
         <section className="rounded-2xl bg-primary px-6 py-10 text-white sm:px-10 sm:py-14">
           <h1 className="max-w-2xl text-3xl font-bold leading-tight sm:text-4xl">
@@ -59,24 +50,7 @@ export default async function HomeFallback() {
           </div>
         </section>
 
-        <ul className="grid gap-3 sm:grid-cols-3">
-          {TRUST.map(({ icon: Icon, title, text }) => (
-            <li
-              key={title}
-              className="flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-gray-900/5"
-            >
-              <span className="flex size-10 items-center justify-center rounded-full bg-brand-soft text-primary">
-                <Icon className="size-5" aria-hidden />
-              </span>
-              <span>
-                <span className="block text-sm font-semibold text-gray-900">
-                  {title}
-                </span>
-                <span className="block text-xs text-gray-600">{text}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+        <TrustBar />
 
         {categories.length > 0 && (
           <section aria-labelledby="fallback-categories">

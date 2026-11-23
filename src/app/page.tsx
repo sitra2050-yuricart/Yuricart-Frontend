@@ -1,4 +1,7 @@
 import HomeFallback from "@/components/home/HomeFallback";
+import TrustBar from "@/components/home/TrustBar";
+import BrandsStrip from "@/components/home/BrandsStrip";
+import { getNavBrands } from "@/lib/api";
 import HeroSlider from "@/components/home/HeroSlider";
 import PromoCards from "@/components/home/PromoCards";
 import CategoryCircles from "@/components/home/CategoryCircles";
@@ -40,6 +43,8 @@ export default async function Home() {
 
   if (!data) return <HomeFallback />;
 
+  const brands = await getNavBrands().catch(() => []);
+
   const featuredById = Object.fromEntries(
     data.featuredSections.map((s) => [s.id, s]),
   );
@@ -67,6 +72,7 @@ export default async function Home() {
         <HeroSlider slides={data.heroSlides} />
         <PromoCards cards={data.promoCards} />
         <CategoryCircles categories={data.categories} />
+        <TrustBar />
 
         {/* Below-the-fold: deferred so hero wins bandwidth */}
         <DeferredBannerGrid
@@ -116,6 +122,7 @@ export default async function Home() {
             products={featuredById.featured.products}
           />
         )}
+        <BrandsStrip brands={brands} />
       </div>
     </main>
   );

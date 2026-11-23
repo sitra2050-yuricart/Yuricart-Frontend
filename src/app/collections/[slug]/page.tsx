@@ -45,8 +45,11 @@ function toPrice(value?: string): number | undefined {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const { price_min, price_max, sort, brand, in_stock } = await searchParams;
+  const filtered = Boolean(price_min || price_max || sort || brand || in_stock);
   const category = await orRedirectOnNotFound(
     `/collections/${slug}`,
     () => getCategoryBySlug(slug),
@@ -64,7 +67,7 @@ export async function generateMetadata({
       image: imageUrl || undefined,
       imageAlt,
       // An empty category should not be indexed as a thin page.
-      noIndex: category.productCount === 0,
+      noIndex: category.productCount === 0 || filtered,
     }),
     title: absoluteSeoTitle(seoTitle),
   };

@@ -5,6 +5,7 @@ import { MapPin } from "lucide-react";
 import { useWhatsAppNumber } from "@/components/WhatsAppSettingsProvider";
 import type { Category } from "@/lib/api/types";
 import { SHOP_INFO } from "@/lib/shop-info";
+import { HELP_LINKS } from "@/content/pages";
 
 interface FooterProps {
   categories?: Category[];
@@ -17,7 +18,7 @@ export default function Footer({ categories = [] }: FooterProps) {
   return (
     <footer className="bg-surface pb-24 pt-12 sm:pt-16 lg:pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div>
             <h2 className="text-xl font-bold text-gray-900">{SHOP_INFO.name}</h2>
             <address className="mt-4 flex items-start gap-2 text-sm not-italic leading-relaxed text-gray-700">
@@ -73,6 +74,17 @@ export default function Footer({ categories = [] }: FooterProps) {
             </ul>
           </nav>
 
+          <nav aria-label="Help">
+            <h2 className="text-sm font-bold text-gray-900">Help</h2>
+            <ul className="mt-4 space-y-2.5 text-sm text-gray-700">
+              {HELP_LINKS.map((link) => (
+                <FooterLink key={link.href} href={link.href}>
+                  {link.label}
+                </FooterLink>
+              ))}
+            </ul>
+          </nav>
+
           <div>
             <h2 className="text-sm font-bold text-gray-900">Talk to us</h2>
             <p className="mt-4 text-sm text-gray-700">
@@ -90,9 +102,15 @@ export default function Footer({ categories = [] }: FooterProps) {
           </div>
         </div>
 
-        <p className="mt-10 border-t border-gray-300 pt-6 text-xs text-gray-600">
-          &copy; {new Date().getFullYear()} {SHOP_INFO.name}. All rights reserved.
-        </p>
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-gray-300 pt-6 text-xs text-gray-600">
+          <p>
+            &copy; {new Date().getFullYear()} {SHOP_INFO.name}. All rights reserved.
+          </p>
+          <ul className="flex gap-4">
+            <FooterLink href="/privacy">Privacy policy</FooterLink>
+            <FooterLink href="/terms">Terms of sale</FooterLink>
+          </ul>
+        </div>
       </div>
     </footer>
   );

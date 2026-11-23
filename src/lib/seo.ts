@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SUPPORT_WHATSAPP } from "@/lib/constants";
 import type { Category, Product } from "@/lib/api/types";
 import { getProductEffectivePrice, getProductImageUrl } from "@/lib/api/product-utils";
 
@@ -211,11 +212,31 @@ export function buildBreadcrumbJsonLd(
 export function buildOrganizationJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "ElectronicsStore"],
     name: siteConfig.name,
     url: absoluteUrl("/"),
     logo: absoluteUrl("/newlogoog.jpg"),
+    image: absoluteUrl("/newlogoog.jpg"),
     description: siteConfig.description,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Bazaar Plaza, Moi Avenue, 1st Floor, Shop A02",
+      addressLocality: "Nairobi",
+      addressCountry: "KE",
+    },
+    areaServed: { "@type": "Country", name: "Kenya" },
+    telephone: `+${SUPPORT_WHATSAPP}`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: `+${SUPPORT_WHATSAPP}`,
+      contactType: "customer service",
+      availableLanguage: ["en"],
+    },
+    sameAs: [
+      "https://www.facebook.com/yuricarts/",
+      "https://www.instagram.com/yuricart_electronics",
+      "https://www.tiktok.com/@yuritechs",
+    ],
   };
 }
 

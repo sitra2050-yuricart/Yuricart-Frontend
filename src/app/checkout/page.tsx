@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Field, FormError, SubmitButton } from "@/components/auth/Field";
@@ -11,6 +11,7 @@ import { formatCurrency } from "@/lib/utils";
 import { getUnitPrice } from "@/lib/api/product-utils";
 import { StorefrontApiError } from "@/lib/api/client";
 import { isValidKenyanPhone } from "@/lib/phone";
+import { quoteShipping, type ShippingQuote } from "@/lib/api/shipping";
 import { useClearCart } from "@/hooks/cart";
 import {
   Select,
@@ -32,6 +33,8 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
   const [phoneError, setPhoneError] = useState("");
   const [formError, setFormError] = useState("");
+  const [quote, setQuote] = useState<ShippingQuote | null>(null);
+  const [quoteState, setQuoteState] = useState<"idle" | "loading" | "error">("idle");
 
   const [form, setForm] = useState({
     customerName: "",
@@ -46,6 +49,27 @@ export default function CheckoutPage() {
   const set =
     (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
+
+  // Ask the API what delivery costs once there is a city; same rules the order uses.
+  const city = form.city.trim();
+  useEffect(() => {
+    if (!city) {
+      setQuote(null);
+      setQuoteState("idle");
+      return;
+    }
+    setQuoteState("loading");
+    const timer = setTimeout(async () => {
+      try {
+        setQuote(await quoteShipping(subtotal, city));
+        setQuoteState("idle");
+      } catch {
+        setQuote(null);
+        setQuoteState("error");
+      }
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [city, subtotal]);
 
   if (!items.length) {
     return (
@@ -85,7 +109,6 @@ export default function CheckoutPage() {
       const order = await createOrder(
         {
           ...form,
-          county: "Kenya",
           paymentMethod,
           items: items.map((item) => ({
             productId: item.productId,
@@ -159,7 +182,38 @@ export default function CheckoutPage() {
             </li>
           ))}
         </ul>
-        <p className="font-bold">Subtotal: {formatCurrency(subtotal)}</p>
+        <dl className="space-y-1.5 border-t border-gray-100 pt-3 text-sm">
+          <div className="flex justify-between gap-4">
+            <dt>Subtotal:</dt>
+            <dd className="font-semibold">{formatCurrency(subtotal)}</dd>
+          </div>
+          <div className="flex justify-between gap-4" aria-live="polite">
+            <dt>Delivery:</dt>
+            <dd className="font-semibold">
+              {quote
+                ? quote.shipping === 0
+                  ? "Free"
+                  : formatCurrency(quote.shipping)
+                : quoteState === "loading"
+                  ? "Checking…"
+                  : quoteState === "error"
+                    ? "Confirmed when we contact you"
+                    : "Enter your city below"}
+            </dd>
+          </div>
+          {quote && quote.freeAbove && quote.shipping > 0 && subtotal < quote.freeAbove ? (
+            <p className="text-xs text-gray-600">
+              Free delivery on orders over {formatCurrency(quote.freeAbove)}.
+            </p>
+          ) : null}
+          <div className="flex justify-between gap-4 border-t border-gray-100 pt-2 text-base font-bold">
+            <dt>Total:</dt>
+            <dd>{quote ? formatCurrency(subtotal + quote.shipping) : formatCurrency(subtotal)}</dd>
+          </div>
+          {!quote ? (
+            <p className="text-xs text-gray-600">Delivery is added to the total once we know your city.</p>
+          ) : null}
+        </dl>
       </section>
 
       <form onSubmit={handleSubmit} className="space-y-5">
