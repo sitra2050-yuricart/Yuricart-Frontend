@@ -98,7 +98,7 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
                     </span>
                   )}
                 </span>
-                <span className="hidden lg:inline">Cart</span>
+                <span className="ml-2 hidden lg:inline">Cart</span>
               </button>
 
               <div className="flex items-center text-white">
@@ -117,8 +117,8 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
           aria-label="Categories"
           className="hidden border-b border-gray-200 bg-white md:block"
         >
-          <div className="mx-auto max-w-7xl px-4 py-2.5">
-            <ul className="thin-scrollbar mx-auto flex w-max max-w-full items-center gap-5 overflow-x-auto lg:gap-7">
+          <div className="mx-auto max-w-7xl px-4 py-1.5">
+            <ul className="thin-scrollbar mx-auto flex w-max max-w-full items-center gap-5 overflow-x-auto px-1 py-1 lg:gap-7">
               {navLinks.map((link) => (
                 <li key={link.href + link.label} className="shrink-0">
                   <Link

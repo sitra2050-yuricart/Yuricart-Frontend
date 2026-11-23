@@ -11,7 +11,7 @@ export default function CategoryCircles({ categories }: CategoryCirclesProps) {
   if (!categories.length) return null;
 
   return (
-    <div className="overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+    <div className="overflow-x-auto pb-2 pt-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="mx-auto flex w-max min-w-full items-start justify-center gap-5 px-1 sm:gap-8 md:gap-10">
         {categories.map((cat) => (
           <Link

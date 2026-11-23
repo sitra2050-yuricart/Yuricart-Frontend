@@ -21,7 +21,7 @@ export default function CategoryStrip({
   return (
     <nav
       aria-label="Shop by category"
-      className="thin-scrollbar -mx-5 overflow-x-auto px-5 pb-2 sm:mx-0 sm:px-0"
+      className="thin-scrollbar -mx-5 overflow-x-auto px-5 pb-2 pt-1.5 sm:-mx-1 sm:px-1"
     >
       <ul className="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
         <li>

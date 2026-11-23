@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, MessageCircle, ShieldCheck, Truck } from "lucide-react";
 import ProductCard from "@/components/product/ProductCard";
-import { getAllCategories, getProducts } from "@/lib/api";
+import { getNavCategories, getProducts } from "@/lib/api";
 import type { Category, Product } from "@/lib/api/types";
 import { SHOP_INFO } from "@/lib/shop-info";
 
@@ -26,7 +26,7 @@ const TRUST = [
  */
 export default async function HomeFallback() {
   const [categories, products] = await Promise.all([
-    getAllCategories().catch((): Category[] => []),
+    getNavCategories().catch((): Category[] => []),
     getProducts({ limit: 10, sort: "createdAt_desc" })
       .then((r) => r.items)
       .catch((): Product[] => []),

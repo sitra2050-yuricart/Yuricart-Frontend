@@ -9,6 +9,7 @@ const svg = (label) =>
 const cats = [
   { _id: "c1", name: "Laptops", slug: "laptops", description: "Laptops for work and study." },
   { _id: "c2", name: "Printers", slug: "printers" },
+  { _id: "c3", name: "Accessories", slug: "accessories" },
 ];
 
 const mk = (i, title, price, extra = {}) => ({
@@ -32,6 +33,10 @@ const mk = (i, title, price, extra = {}) => ({
 const products = Array.from({ length: 24 }, (_, i) =>
   mk(i, `HP EliteBook 8${30 + i} G5`, 30000 + i * 1000, i % 5 === 0 ? { salePrice: 28000 + i * 900 } : {}),
 );
+
+for (const category of cats) {
+  category.productCount = products.filter((x) => x.category.slug === category.slug).length;
+}
 
 const ok = (data, meta) => ({ success: true, data, ...(meta ? { meta } : {}) });
 
@@ -96,6 +101,10 @@ http
     else if (/^\/categories\/[^/]+\/products$/.test(p) || p === "/products") {
       let list = products;
       if (p !== "/products") list = list.filter((x) => x.category.slug === p.split("/")[2]);
+      const minPrice = url.searchParams.get("minPrice");
+      const maxPrice = url.searchParams.get("maxPrice");
+      if (minPrice) list = list.filter((x) => x.price >= Number(minPrice));
+      if (maxPrice) list = list.filter((x) => x.price <= Number(maxPrice));
       const q = url.searchParams.get("q");
       if (q) list = list.filter((x) => x.title.toLowerCase().includes(q.toLowerCase()));
       const limit = Number(url.searchParams.get("limit") || 8);

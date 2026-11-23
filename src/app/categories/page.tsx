@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import Breadcrumb from "@/components/listing/Breadcrumb";
-import { getAllCategories, getCategoryImageUrl } from "@/lib/api";
+import { getNavCategories, getCategoryImageUrl } from "@/lib/api";
 import { Category } from "@/lib/api/types";
 import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
 import { buildPageMetadata } from "@/lib/seo";
@@ -17,7 +17,7 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function Page() {
   let categories: Category[] = [];
   try {
-    categories = await getAllCategories();
+    categories = await getNavCategories();
   } catch {
     categories = [];
   }

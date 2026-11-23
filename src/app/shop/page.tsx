@@ -1,5 +1,5 @@
 import ListingView from "@/components/listing/ListingView";
-import { getAllCategories, type ProductsSort } from "@/lib/api";
+import { getNavCategories, type ProductsSort } from "@/lib/api";
 import { Category } from "@/lib/api/types";
 import { Metadata } from "next";
 import { buildPageMetadata } from "@/lib/seo";
@@ -55,7 +55,7 @@ export default async function Page({ searchParams }: PageProps) {
 
   let categories: Category[] = [];
   try {
-    categories = await getAllCategories();
+    categories = await getNavCategories();
   } catch {
     categories = [];
   }

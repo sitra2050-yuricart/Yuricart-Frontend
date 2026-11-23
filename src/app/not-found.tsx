@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { getAllCategories } from "@/lib/api";
+import { getNavCategories } from "@/lib/api";
 import type { Category } from "@/lib/api/types";
 import SearchField from "@/components/SearchFiend";
 
 export default async function NotFound() {
-  const categories: Category[] = await getAllCategories().catch(() => []);
+  const categories: Category[] = await getNavCategories().catch(() => []);
 
   return (
     <main className="mx-auto max-w-2xl space-y-6 px-5 py-16 text-center">

@@ -334,7 +334,7 @@ export function ProductRail({
     >
       <div
         ref={scroller}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth p-4 md:p-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory scroll-px-4 gap-3 overflow-x-auto scroll-smooth p-4 md:scroll-px-6 md:p-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {items.map((item) => (
           <div
