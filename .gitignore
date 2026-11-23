@@ -38,3 +38,6 @@ temp_interactive_push.bat
 config.bat
 .env*.local
 .env
+# tests
+/test-results/
+/playwright-report/

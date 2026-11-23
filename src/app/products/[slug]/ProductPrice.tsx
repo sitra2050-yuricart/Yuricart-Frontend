@@ -43,7 +43,7 @@ export default function ProductPrice({
       </p>
       {hasDiscount && (
         <>
-          <span className="pb-0.5 text-base text-gray-400 line-through">
+          <span className="pb-0.5 text-base text-gray-500 line-through">
             {toKes(priceData.formatted?.price)}
           </span>
           {discountValue ? (

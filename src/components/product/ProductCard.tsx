@@ -78,7 +78,7 @@ export default function ProductCard({ product, priority }: ProductCardProps) {
             {price > 0 ? formatKes(price) : PRICE_ON_REQUEST}
           </span>
           {onSale && price > 0 ? (
-            <span className="text-xs text-gray-400 line-through">
+            <span className="text-xs text-gray-500 line-through">
               {formatKes(product.price)}
             </span>
           ) : null}
