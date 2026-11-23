@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 import { CartItem, Product } from "@/lib/api/types";
 import {
   getProductEffectivePrice,
+  getUnitPrice,
   getProductImageUrl,
 } from "@/lib/api/product-utils";
 
@@ -45,7 +46,7 @@ function formatLinePrice(amount: number, currency = "KES") {
 }
 
 function toLegacyLine(item: CartItem): LegacyCartLineItem {
-  const unitPrice = item.salePrice ?? item.price;
+  const unitPrice = getUnitPrice(item);
   return {
     _id: item.lineId,
     quantity: item.quantity,
@@ -77,7 +78,7 @@ function toLegacyLine(item: CartItem): LegacyCartLineItem {
 
 function computeSubtotal(items: CartItem[]) {
   const amount = items.reduce(
-    (sum, item) => sum + (item.salePrice ?? item.price) * item.quantity,
+    (sum, item) => sum + getUnitPrice(item) * item.quantity,
     0,
   );
   const currency = items[0]?.currency || "KES";

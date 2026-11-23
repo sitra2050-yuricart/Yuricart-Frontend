@@ -47,8 +47,17 @@ const productSchema = z.object({
   seoTitle: z.string().max(70).optional(),
   metaDescription: z.string().max(320).optional(),
   primaryImageAlt: z.string().max(200).optional(),
-  price: z.coerce.number().min(0, "Price must be 0 or more"),
-  salePrice: z.coerce.number().min(0).optional().or(z.literal("")),
+  price: z.coerce.number().positive("Price must be greater than 0"),
+  // "" must stay "" (z.coerce.number() would turn an empty field into 0, which
+  // used to be saved as a sale price of KES 0).
+  salePrice: z
+    .union([
+      z.literal(""),
+      z.coerce
+        .number()
+        .positive("Sale price must be greater than 0, or leave it empty"),
+    ])
+    .optional(),
   sku: z.string().optional(),
   stock: z.coerce.number().int().min(0),
   category: z.string().optional(),
@@ -61,6 +70,14 @@ const productSchema = z.object({
   featured: z.boolean(),
   newArrival: z.boolean(),
   bestSeller: z.boolean(),
+}).superRefine((values, ctx) => {
+  if (typeof values.salePrice === "number" && values.salePrice >= values.price) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["salePrice"],
+      message: "Sale price must be lower than the price",
+    });
+  }
 });
 
 type ProductFormValues = z.infer<typeof productSchema>;
@@ -303,8 +320,13 @@ export default function ProductForm({
       formData.append("newGalleryAlts", JSON.stringify(newGalleryAlts));
     }
     formData.append("price", String(values.price));
-    if (values.salePrice !== "" && values.salePrice !== undefined)
-      formData.append("salePrice", String(values.salePrice));
+    // Always send it: an empty value tells the server to clear any existing sale price.
+    formData.append(
+      "salePrice",
+      values.salePrice === "" || values.salePrice === undefined
+        ? ""
+        : String(values.salePrice),
+    );
     if (values.sku) formData.append("sku", values.sku);
     formData.append("stock", String(values.stock));
     if (values.category) formData.append("category", values.category);

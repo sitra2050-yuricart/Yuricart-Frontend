@@ -7,6 +7,7 @@ import {
   getProductPrimaryImage,
   getProductGallery,
   hasProductDiscount,
+  PRICE_ON_REQUEST,
 } from "./product-utils";
 import { Product } from "./types";
 
@@ -19,8 +20,13 @@ export function toLegacyProductCard(product: Product) {
   const gallery = getProductGallery(product);
   const discounted = hasProductDiscount(product);
   const effectivePrice = discounted ? product.salePrice! : product.price;
-  const formattedPrice = formatCurrency(effectivePrice, product.currency);
-  const formattedOriginal = formatCurrency(product.price, product.currency);
+  const hasPrice = effectivePrice > 0;
+  const formattedPrice = hasPrice
+    ? formatCurrency(effectivePrice, product.currency)
+    : PRICE_ON_REQUEST;
+  const formattedOriginal = hasPrice
+    ? formatCurrency(product.price, product.currency)
+    : PRICE_ON_REQUEST;
   const discountPercent = getProductDiscountPercent(product);
 
   const mediaItems: Array<{

@@ -10,6 +10,8 @@ import { useCartStore } from "@/lib/cart/cart-store";
 import { createOrder } from "@/lib/api/orders";
 import { getCustomerToken } from "@/lib/api/auth";
 import { formatCurrency } from "@/lib/utils";
+import { getUnitPrice } from "@/lib/api/product-utils";
+import { StorefrontApiError } from "@/lib/api/client";
 import { useClearCart } from "@/hooks/cart";
 import {
   Select,
@@ -84,7 +86,7 @@ export default function CheckoutPage() {
         contents: items.map((item) => ({
           id: item.productId,
           quantity: item.quantity,
-          item_price: item.salePrice ?? item.price,
+          item_price: getUnitPrice(item),
         })),
         value: order.total ?? subtotal,
         currency: items[0]?.currency || "KES",
@@ -99,7 +101,11 @@ export default function CheckoutPage() {
       );
     } catch (error) {
       console.error(error);
-      alert("Failed to place order. Please try again.");
+      alert(
+        error instanceof StorefrontApiError && error.message
+          ? error.message
+          : "Failed to place order. Please try again.",
+      );
     } finally {
       setPending(false);
     }
@@ -124,7 +130,7 @@ export default function CheckoutPage() {
               </span>
               <span>
                 {formatCurrency(
-                  (item.salePrice ?? item.price) * item.quantity,
+                  getUnitPrice(item) * item.quantity,
                   item.currency,
                 )}
               </span>

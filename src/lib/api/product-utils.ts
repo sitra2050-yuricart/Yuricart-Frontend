@@ -62,11 +62,24 @@ export function getProductVideo(product: Product) {
   return product.video?.url ? product.video : undefined;
 }
 
+/** Shown instead of a price when a product has no usable price (price <= 0). */
+export const PRICE_ON_REQUEST = "Price on request";
+
+/**
+ * A sale price only counts when it is a real discount (> 0 and below the
+ * regular price). A sale price of 0 means "no sale", never "free".
+ */
+export function getUnitPrice(item: {
+  price: number;
+  salePrice?: number | null;
+}): number {
+  const sale = item.salePrice;
+  if (sale != null && sale > 0 && sale < item.price) return sale;
+  return item.price;
+}
+
 export function getProductEffectivePrice(product: Product): number {
-  if (product.salePrice != null && product.salePrice < product.price) {
-    return product.salePrice;
-  }
-  return product.price;
+  return getUnitPrice(product);
 }
 
 export function hasProductDiscount(product: Product): boolean {
