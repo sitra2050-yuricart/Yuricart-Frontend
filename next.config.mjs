@@ -11,6 +11,8 @@ const nextConfig = {
     },
   },
   images: {
+    // Cloudinary does the resizing; see src/lib/image-loader.ts
+    loaderFile: "./src/lib/image-loader.ts",
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
