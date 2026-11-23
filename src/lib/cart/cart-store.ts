@@ -7,6 +7,7 @@ import {
   getProductEffectivePrice,
   getUnitPrice,
   getProductImageUrl,
+  PRICE_ON_REQUEST,
 } from "@/lib/api/product-utils";
 
 export interface LegacyCartLineItem {
@@ -60,7 +61,8 @@ function toLegacyLine(item: CartItem): LegacyCartLineItem {
       : [],
     price: {
       amount: unitPrice,
-      formattedConvertedAmount: formatLinePrice(unitPrice, item.currency),
+      formattedConvertedAmount:
+        unitPrice > 0 ? formatLinePrice(unitPrice, item.currency) : PRICE_ON_REQUEST,
     },
     fullPrice:
       item.salePrice && item.salePrice < item.price
