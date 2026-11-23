@@ -1,6 +1,7 @@
 import ListingView from "@/components/listing/ListingView";
 import {
   getAllCategories,
+  hasProducts,
   getCategoryBySlug,
   getCategoryImageUrl,
   type ProductsSort,
@@ -59,6 +60,8 @@ export async function generateMetadata({
       path: `/collections/${category.slug}`,
       image: imageUrl || undefined,
       imageAlt,
+      // An empty category should not be indexed as a thin page.
+      noIndex: category.productCount === 0,
     }),
     title: absoluteSeoTitle(seoTitle),
   };
@@ -76,7 +79,9 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   let categories: Category[] = [];
   try {
-    categories = await getAllCategories();
+    categories = (await getAllCategories()).filter(
+      (c) => hasProducts(c) || c.slug === category.slug,
+    );
   } catch {
     categories = [];
   }

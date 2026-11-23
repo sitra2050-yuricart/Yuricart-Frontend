@@ -28,3 +28,13 @@ export async function getAllCategories(): Promise<Category[]> {
   const { items } = await getCategories({ limit: 100, page: 1 });
   return items;
 }
+
+/** False only for categories known to be empty (older APIs omit the count, so they stay visible). */
+export function hasProducts(category: Category): boolean {
+  return category.productCount === undefined || category.productCount > 0;
+}
+
+/** Categories worth showing in navigation: empty ones lead to dead-end pages. */
+export async function getNavCategories(): Promise<Category[]> {
+  return (await getAllCategories()).filter(hasProducts);
+}

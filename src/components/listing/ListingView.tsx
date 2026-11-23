@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import Breadcrumb, { type Crumb } from "./Breadcrumb";
 import CategoryStrip from "./CategoryStrip";
@@ -63,9 +64,15 @@ async function Results({ query }: { query: ListingQuery }) {
     };
   }
 
+  const hasFilters = Boolean(
+    query.q || query.minPrice !== undefined || query.maxPrice !== undefined,
+  );
+
   return (
     <div className="space-y-5">
-      <ListingToolbar total={result.meta.total} />
+      {result.items.length || hasFilters ? (
+        <ListingToolbar total={result.meta.total} />
+      ) : null}
       {result.items.length ? (
         <ProductGrid
           initialItems={result.items}
@@ -76,11 +83,21 @@ async function Results({ query }: { query: ListingQuery }) {
       ) : (
         <div className="rounded-2xl bg-white px-6 py-16 text-center ring-1 ring-gray-900/5">
           <p className="font-serif text-lg font-bold text-gray-900">
-            No products found
+            {hasFilters ? "No products found" : "Nothing here yet"}
           </p>
-          <p className="mt-1 text-sm text-gray-500">
-            Try a different category, search or price range.
+          <p className="mt-1 text-sm text-gray-600">
+            {hasFilters
+              ? "Try a different search or price range."
+              : "We have no products in this category right now."}
           </p>
+          {!hasFilters ? (
+            <Link
+              href="/shop"
+              className="mt-5 inline-flex h-11 items-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white transition hover:bg-[#002f5d]"
+            >
+              Browse all products
+            </Link>
+          ) : null}
         </div>
       )}
     </div>

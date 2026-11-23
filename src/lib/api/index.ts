@@ -15,6 +15,8 @@ export {
   getCategories,
   getCategoryBySlug,
   getAllCategories,
+  getNavCategories,
+  hasProducts,
 } from "./categories";
 
 export {

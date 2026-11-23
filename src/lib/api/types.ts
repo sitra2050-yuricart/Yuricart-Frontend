@@ -68,6 +68,8 @@ export interface Category {
   metaDescription?: string;
   status?: "active" | "inactive";
   sortOrder?: number;
+  /** Active products in this category (public API). Undefined on older APIs. */
+  productCount?: number;
   createdAt?: string;
   updatedAt?: string;
 }

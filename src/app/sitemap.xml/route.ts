@@ -1,4 +1,4 @@
-import { getAllCategories, getProducts } from "@/lib/api";
+import { getAllCategories, getProducts, hasProducts } from "@/lib/api";
 import { absoluteUrl } from "@/lib/seo";
 import { buildSitemapXml, type SitemapEntry } from "@/lib/sitemap";
 
@@ -41,7 +41,7 @@ export async function GET() {
 
   try {
     const categories = await getAllCategories();
-    for (const category of categories) {
+    for (const category of categories.filter(hasProducts)) {
       entries.push({
         url: absoluteUrl(`/collections/${category.slug}`),
         lastModified: category.updatedAt ? new Date(category.updatedAt) : now,
