@@ -77,7 +77,7 @@ export function SectionTabs({
 
   return (
     <div
-      className="sticky z-20 -mx-2 mt-5 bg-[#f6f7f9]/90 px-2 py-2 backdrop-blur md:mx-0 md:px-0"
+      className="sticky z-20 -mx-2 mt-5 bg-surface/90 px-2 py-2 backdrop-blur md:mx-0 md:px-0"
       style={{ top }}
     >
       <nav
@@ -93,7 +93,7 @@ export function SectionTabs({
             className={cn(
               "h-9 flex-none whitespace-nowrap rounded-full px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 md:flex-1 md:px-2",
               active === tab.id &&
-                "bg-[#003B73] font-semibold text-white shadow-sm hover:bg-[#003B73] hover:text-white",
+                "bg-primary font-semibold text-white shadow-sm hover:bg-primary hover:text-white",
             )}
           >
             {tab.label}
@@ -128,7 +128,7 @@ export function SectionCard({
           <h2 className={SECTION_TITLE}>
             <span
               aria-hidden="true"
-              className="h-5 w-1 rounded-full bg-primary"
+              className="h-5 w-1 rounded-full bg-cta"
             />
             {title}
           </h2>
@@ -186,7 +186,7 @@ export function Expandable({ children }: { children: React.ReactNode }) {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
-            className="rounded-full border border-[#003B73]/25 px-5 py-1.5 text-sm font-semibold text-[#003B73] transition hover:bg-[#003B73] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73]/40"
+            className="rounded-full border border-primary/25 px-5 py-1.5 text-sm font-semibold text-primary transition hover:bg-primary hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
             {open ? "Show less" : "Show more"}
           </button>
@@ -227,7 +227,7 @@ export function RailCard({ item }: { item: RailItem }) {
   return (
     <Link
       href={`/products/${item.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition duration-200 hover:-translate-y-0.5 hover:border-[#003B73]/20 hover:shadow-[0_14px_30px_-14px_rgba(0,59,115,0.35)]"
+      className="group flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition duration-200 hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-[0_14px_30px_-14px_rgba(0,59,115,0.35)]"
     >
       <div className="relative aspect-square bg-gray-50">
         <ProductImage
@@ -239,11 +239,11 @@ export function RailCard({ item }: { item: RailItem }) {
         />
       </div>
       <div className="flex flex-1 flex-col gap-2 p-3">
-        <h3 className="line-clamp-2 min-h-10 text-sm font-medium leading-snug text-gray-800 transition-colors group-hover:text-[#003B73]">
+        <h3 className="line-clamp-2 min-h-10 text-sm font-medium leading-snug text-gray-800 transition-colors group-hover:text-primary">
           {item.name}
         </h3>
         <div className="mt-auto flex flex-wrap items-baseline gap-x-2">
-          <strong className="text-base font-bold text-[#003B73]">
+          <strong className="text-base font-bold text-primary">
             {item.price}
           </strong>
           {item.originalPrice && (
@@ -258,7 +258,7 @@ export function RailCard({ item }: { item: RailItem }) {
 }
 
 const ARROW =
-  "flex size-8 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-sm transition hover:border-[#003B73] hover:text-[#003B73] disabled:pointer-events-none disabled:opacity-40";
+  "flex size-8 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-700 shadow-sm transition hover:border-primary hover:text-primary disabled:pointer-events-none disabled:opacity-40";
 
 export function ProductRail({
   id,
@@ -431,7 +431,7 @@ export function CompareTable({ items }: { items: CompareItem[] }) {
                   {/* Same-height slot in every column so the badge never shifts one column down */}
                   <div className="mb-2 h-5">
                     {index === 0 && (
-                      <span className="inline-block rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold uppercase leading-4 tracking-wide text-white">
+                      <span className="inline-block rounded-full bg-cta px-2.5 py-0.5 text-[10px] font-bold uppercase leading-4 tracking-wide text-white">
                         This product
                       </span>
                     )}
@@ -449,10 +449,10 @@ export function CompareTable({ items }: { items: CompareItem[] }) {
                         className="object-contain p-1"
                       />
                     </div>
-                    <span className="line-clamp-2 h-10 font-medium leading-snug text-gray-800 group-hover:text-[#003B73]">
+                    <span className="line-clamp-2 h-10 font-medium leading-snug text-gray-800 group-hover:text-primary">
                       {item.name}
                     </span>
-                    <strong className="text-base text-[#003B73]">
+                    <strong className="text-base text-primary">
                       {item.price}
                     </strong>
                     <span
@@ -500,7 +500,7 @@ export function CompareTable({ items }: { items: CompareItem[] }) {
                           : "bg-white",
                     )}
                   >
-                    {value || <span className="text-gray-300">—</span>}
+                    {value || <span className="text-gray-500">—</span>}
                   </td>
                 ))}
               </tr>

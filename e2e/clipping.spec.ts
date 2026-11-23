@@ -72,6 +72,11 @@ for (const path of PAGES) {
   test(`no border or focus ring is clipped on ${path}`, async ({ page }) => {
     await page.goto(path);
     await page.waitForLoadState("networkidle");
+    // Measure only after fonts and images settle, or layout is still moving.
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForFunction(() =>
+      Array.from(document.images).every((img) => img.complete),
+    );
     expect(await findClippedRings(page)).toEqual([]);
   });
 }

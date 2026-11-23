@@ -23,7 +23,7 @@ function ResetForm() {
       <AuthShell
         title="This link is not valid"
         subtitle="The reset link is missing or incomplete."
-        footer={<Link href="/forgot-password" className="font-semibold text-[#003B73] hover:underline">Request a new link</Link>}
+        footer={<Link href="/forgot-password" className="font-semibold text-primary hover:underline">Request a new link</Link>}
       >
         <p className="text-sm text-gray-700">Open the link from your email again, or ask for a new one.</p>
       </AuthShell>
@@ -39,7 +39,7 @@ function ResetForm() {
         </div>
         <Link
           href="/login"
-          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white transition hover:bg-[#002f5d]"
+          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90"
         >
           Log in
         </Link>
@@ -73,7 +73,7 @@ function ResetForm() {
   return (
     <AuthShell
       title="Choose a new password"
-      footer={<Link href="/forgot-password" className="font-semibold text-[#003B73] hover:underline">Need a new link?</Link>}
+      footer={<Link href="/forgot-password" className="font-semibold text-primary hover:underline">Need a new link?</Link>}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <FormError message={error} />

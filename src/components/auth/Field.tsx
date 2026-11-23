@@ -11,7 +11,7 @@ interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const INPUT =
-  "h-11 w-full rounded-xl border-0 bg-white px-4 text-sm text-gray-900 ring-1 ring-gray-900/15 transition placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#003B73] disabled:opacity-60";
+  "h-11 w-full rounded-xl border-0 bg-white px-4 text-sm text-gray-900 ring-1 ring-gray-900/15 transition placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-60";
 
 /** Labelled input with an inline error message wired up for screen readers. */
 export function Field({ label, error, hint, className, id, ...props }: FieldProps) {
@@ -70,7 +70,7 @@ export function PasswordField({ label, error, hint, id, ...props }: FieldProps) 
           onClick={() => setVisible((v) => !v)}
           aria-label={visible ? "Hide password" : "Show password"}
           aria-pressed={visible}
-          className="absolute inset-y-0 right-1 my-auto flex size-10 items-center justify-center rounded-full text-gray-500 transition hover:text-[#003B73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73]"
+          className="absolute inset-y-0 right-1 my-auto flex size-10 items-center justify-center rounded-full text-gray-500 transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
         >
           {visible ? <EyeOff className="size-4" aria-hidden /> : <Eye className="size-4" aria-hidden />}
         </button>
@@ -100,7 +100,7 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-[#002f5d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] focus-visible:ring-offset-2 disabled:opacity-70"
+      className="inline-flex h-11 w-full items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-70"
     >
       {pending ? "Please wait…" : children}
     </button>

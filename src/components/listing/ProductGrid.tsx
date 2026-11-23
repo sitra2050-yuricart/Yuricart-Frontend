@@ -65,7 +65,7 @@ export default function ProductGrid({
             type="button"
             onClick={loadMore}
             disabled={pending}
-            className="inline-flex h-11 min-w-40 items-center justify-center gap-2 rounded-full bg-[#003B73] px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-[#002f5d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] focus-visible:ring-offset-2 disabled:opacity-70"
+            className="inline-flex h-11 min-w-40 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-semibold text-white shadow-sm transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-70"
           >
             {pending ? <Loader2 className="size-4 animate-spin" /> : null}
             {pending ? "Loading…" : "Load more"}

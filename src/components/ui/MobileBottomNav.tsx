@@ -6,12 +6,9 @@ import {
   ShoppingBag,
   ShoppingCart,
   User,
-  Monitor,
-  Sun,
-  Moon,
-  Check,
   LogOutIcon,
   LogInIcon,
+  UserPlus,
 } from "lucide-react";
 import { useCartDrawer } from "@/components/ui/CartDrawerContext";
 import { useCartStore } from "@/lib/cart/cart-store";
@@ -22,21 +19,15 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuPortal,
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { useTheme } from "next-themes";
 
 export default function MobileBottomNav() {
   const { openDrawer } = useCartDrawer();
   const hydrated = useCartHydrated();
   const items = useCartStore((s) => s.items);
   const { user, logout, openLogin } = useAuth();
-  const { theme, setTheme } = useTheme();
 
   const totalQuantity = hydrated
     ? items.reduce((sum, item) => sum + (item.quantity || 0), 0)
@@ -80,7 +71,7 @@ export default function MobileBottomNav() {
             {totalQuantity > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white"
+                className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-cta px-1 text-[10px] font-bold text-white"
               >
                 {totalQuantity}
               </span>
@@ -109,29 +100,6 @@ export default function MobileBottomNav() {
                 </>
               )}
 
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <Monitor className="mr-2 size-4" />
-                  Theme
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem onClick={() => setTheme("system")}>
-                      <Monitor className="mr-2 size-4" />
-                      System {theme === "system" && <Check className="ms-2 size-4" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("light")}>
-                      <Sun className="mr-2 size-4" />
-                      Light {theme === "light" && <Check className="ms-2 size-4" />}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("dark")}>
-                      <Moon className="mr-2 size-4" />
-                      Dark {theme === "dark" && <Check className="ms-2 size-4" />}
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-
               <DropdownMenuSeparator />
               {user ? (
                 <DropdownMenuItem onClick={() => logout()}>
@@ -139,10 +107,18 @@ export default function MobileBottomNav() {
                   Logout
                 </DropdownMenuItem>
               ) : (
-                <DropdownMenuItem onClick={() => openLogin()}>
-                  <LogInIcon className="mr-2 size-4" />
-                  Login
-                </DropdownMenuItem>
+                <>
+                  <DropdownMenuItem onClick={() => openLogin()}>
+                    <LogInIcon className="mr-2 size-4" />
+                    Log in
+                  </DropdownMenuItem>
+                  <Link href="/register">
+                    <DropdownMenuItem>
+                      <UserPlus className="mr-2 size-4" />
+                      Create account
+                    </DropdownMenuItem>
+                  </Link>
+                </>
               )}
             </DropdownMenuContent>
           </DropdownMenu>

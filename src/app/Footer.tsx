@@ -15,13 +15,13 @@ export default function Footer({ categories = [] }: FooterProps) {
   const waDigits = whatsappNumber.replace(/\D/g, "");
 
   return (
-    <footer className="bg-[#F4F4F4] pb-24 pt-12 sm:pt-16 lg:pb-12">
+    <footer className="bg-surface pb-24 pt-12 sm:pt-16 lg:pb-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <h2 className="text-xl font-bold text-gray-900">{SHOP_INFO.name}</h2>
             <address className="mt-4 flex items-start gap-2 text-sm not-italic leading-relaxed text-gray-700">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-[#003B73]" aria-hidden />
+              <MapPin className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
               <span>
                 {SHOP_INFO.addressLines.map((line) => (
                   <span key={line} className="block">
@@ -80,7 +80,7 @@ export default function Footer({ categories = [] }: FooterProps) {
             </p>
             <a
               href={`https://wa.me/${waDigits}`}
-              className="mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-[#1a7f43] px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#15683a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1a7f43] focus-visible:ring-offset-2"
+              className="mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-whatsapp px-5 text-sm font-semibold text-white shadow-sm transition hover:bg-whatsapp/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-whatsapp focus-visible:ring-offset-2"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -108,7 +108,7 @@ function FooterLink({
     <li>
       <Link
         href={href}
-        className="rounded transition hover:text-[#003B73] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73]"
+        className="rounded transition hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
       >
         {children}
       </Link>
@@ -132,7 +132,7 @@ function SocialLink({
         href={href}
         aria-label={label}
         title={label}
-        className="flex size-9 items-center justify-center rounded-full bg-gray-900 text-white transition hover:bg-[#003B73]"
+        className="flex size-9 items-center justify-center rounded-full bg-gray-900 text-white transition hover:bg-primary"
         target="_blank"
         rel="noopener noreferrer"
       >

@@ -53,7 +53,7 @@ export default async function OffersPage() {
 
       <header className="rounded-2xl bg-white px-5 py-5 ring-1 ring-gray-900/5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-18px_rgba(16,24,40,0.16)] sm:px-7">
         <div className="flex items-center gap-3">
-          <span className="h-6 w-1 rounded-full bg-primary" aria-hidden />
+          <span className="h-6 w-1 rounded-full bg-cta" aria-hidden />
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
             Offers
           </h1>
@@ -78,7 +78,7 @@ export default async function OffersPage() {
           </p>
           <Link
             href="/shop"
-            className="mt-5 inline-flex h-11 items-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white transition hover:bg-[#002f5d]"
+            className="mt-5 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90"
           >
             Shop all products
           </Link>

@@ -36,23 +36,19 @@ for (const route of ROUTES) {
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa"])
         .analyze();
-      // Known baseline issue, fixed in the Phase 2 design-system work (orange
-      // primary and small grey text fall below 4.5:1). Anything else blocks.
-      const KNOWN = new Set(["color-contrast"]);
-      const contrast = results.violations.find((v) => v.id === "color-contrast");
-      if (contrast) {
-        test.info().annotations.push({
-          type: "baseline-color-contrast",
-          description: contrast.nodes
-            .map((n) => `${n.target.join(" ")} :: ${n.any[0]?.message ?? ""}`)
-            .join(" | "),
-        });
-      }
-      const blocking = results.violations.filter(
-        (v) => ["serious", "critical"].includes(v.impact ?? "") && !KNOWN.has(v.id),
+      // Colour contrast is enforced like any other serious violation. The node
+      // list is included so a failure names the element and its ratio.
+      const blocking = results.violations.filter((v) =>
+        ["serious", "critical"].includes(v.impact ?? ""),
       );
+      const detail = (v: (typeof blocking)[number]) =>
+        `${v.id}: ${v.help} (${v.nodes.length}) ` +
+        v.nodes
+          .slice(0, 4)
+          .map((n) => `${n.target.join(" ")} :: ${n.any[0]?.message ?? ""}`)
+          .join(" | ");
       expect(
-        blocking.map((v) => `${v.id}: ${v.help} (${v.nodes.length})`),
+        blocking.map(detail),
       ).toEqual([]);
     });
   });

@@ -26,13 +26,13 @@ export default function Error({
         <button
           type="button"
           onClick={reset}
-          className="inline-flex h-11 items-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white transition hover:bg-[#002f5d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] focus-visible:ring-offset-2"
+          className="inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
           Try again
         </button>
         <Link
           href="/shop"
-          className="inline-flex h-11 items-center rounded-full bg-white px-6 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-[#003B73]"
+          className="inline-flex h-11 items-center rounded-full bg-white px-6 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-primary"
         >
           Go to the shop
         </Link>

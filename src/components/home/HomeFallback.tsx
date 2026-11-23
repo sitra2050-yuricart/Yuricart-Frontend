@@ -33,9 +33,9 @@ export default async function HomeFallback() {
   ]);
 
   return (
-    <main className="bg-[#f7f8fa]">
+    <main className="bg-surface">
       <div className="mx-auto max-w-[88rem] space-y-8 px-3 py-6 sm:px-5 md:py-10">
-        <section className="rounded-2xl bg-[#003B73] px-6 py-10 text-white sm:px-10 sm:py-14">
+        <section className="rounded-2xl bg-primary px-6 py-10 text-white sm:px-10 sm:py-14">
           <h1 className="max-w-2xl text-3xl font-bold leading-tight sm:text-4xl">
             Laptops, printers and accessories in Nairobi
           </h1>
@@ -46,7 +46,7 @@ export default async function HomeFallback() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/shop"
-              className="inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90"
+              className="inline-flex h-11 items-center gap-2 rounded-full bg-cta px-6 text-sm font-semibold text-white transition hover:bg-cta/90"
             >
               Shop all products <ArrowRight className="size-4" aria-hidden />
             </Link>
@@ -65,7 +65,7 @@ export default async function HomeFallback() {
               key={title}
               className="flex items-center gap-3 rounded-2xl bg-white p-4 ring-1 ring-gray-900/5"
             >
-              <span className="flex size-10 items-center justify-center rounded-full bg-[#eef3f9] text-[#003B73]">
+              <span className="flex size-10 items-center justify-center rounded-full bg-brand-soft text-primary">
                 <Icon className="size-5" aria-hidden />
               </span>
               <span>
@@ -91,7 +91,7 @@ export default async function HomeFallback() {
                 <li key={category._id}>
                   <Link
                     href={`/collections/${category.slug}`}
-                    className="inline-block rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-[#003B73] hover:ring-[#003B73]/40"
+                    className="inline-block rounded-full bg-white px-4 py-2 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-primary hover:ring-primary/40"
                   >
                     {category.name}
                   </Link>

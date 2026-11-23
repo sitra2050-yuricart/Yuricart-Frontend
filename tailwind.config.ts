@@ -21,9 +21,17 @@ const config: Config = {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
+  				DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
+  				foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
   			},
+  			// Orange accent for conversion actions (discount pills, Buy now, Offers).
+  			cta: {
+  				DEFAULT: 'hsl(var(--cta) / <alpha-value>)',
+  				foreground: 'hsl(var(--cta-foreground) / <alpha-value>)'
+  			},
+  			'brand-soft': 'hsl(var(--brand-soft) / <alpha-value>)',
+  			surface: 'hsl(var(--surface) / <alpha-value>)',
+  			whatsapp: 'hsl(var(--whatsapp) / <alpha-value>)',
   			secondary: {
   				DEFAULT: 'hsl(var(--secondary))',
   				foreground: 'hsl(var(--secondary-foreground))'
@@ -53,7 +61,6 @@ const config: Config = {
   		},
   		fontFamily: {
   			sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-  			serif: ["var(--font-serif)", "Georgia", "serif"],
   			mono: ["ui-monospace", "monospace"]
   		},
   		borderRadius: {

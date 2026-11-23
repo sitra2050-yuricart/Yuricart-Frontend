@@ -30,7 +30,7 @@ export default function WhatsAppButton() {
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
       onClick={() => trackLead({ content_name: "Floating WhatsApp" })}
-      className={cn("fixed bottom-20 right-4 z-50 flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:scale-105 hover:bg-[#1ebe57] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] md:bottom-6 md:right-6", onProductPage && "bottom-36 md:bottom-6")}
+      className={cn("fixed bottom-20 right-4 z-50 flex size-14 items-center justify-center rounded-full bg-whatsapp text-white shadow-lg transition hover:scale-105 hover:bg-whatsapp/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-whatsapp md:bottom-6 md:right-6", onProductPage && "bottom-36 md:bottom-6")}
     >
       <svg
         aria-hidden="true"

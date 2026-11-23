@@ -7,8 +7,8 @@ import { HomepageBannerGrid } from "@/lib/api/homepage";
 const ProductCarouselLazy = dynamic(() => import("./ProductCarousel"), {
   loading: () => (
     <div className="space-y-4">
-      <div className="h-8 w-48 animate-pulse rounded bg-[#e8eef5]" />
-      <div className="h-[22rem] animate-pulse rounded-xl bg-[#e8eef5]" />
+      <div className="h-8 w-48 animate-pulse rounded bg-brand-soft" />
+      <div className="h-[22rem] animate-pulse rounded-xl bg-brand-soft" />
     </div>
   ),
 });
@@ -16,12 +16,12 @@ const ProductCarouselLazy = dynamic(() => import("./ProductCarousel"), {
 const BannerGridLazy = dynamic(() => import("./BannerGrid"), {
   loading: () => (
     <div className="space-y-4">
-      <div className="h-8 w-56 animate-pulse rounded bg-[#e8eef5]" />
+      <div className="h-8 w-56 animate-pulse rounded bg-brand-soft" />
       <div className="grid grid-cols-2 gap-2 sm:gap-3">
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="aspect-[3/2] animate-pulse rounded-xl bg-[#e8eef5]"
+            className="aspect-[3/2] animate-pulse rounded-xl bg-brand-soft"
           />
         ))}
       </div>

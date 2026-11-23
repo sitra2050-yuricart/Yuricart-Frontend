@@ -9,7 +9,7 @@ interface CategoryStripProps {
 }
 
 const CHIP =
-  "shrink-0 rounded-full px-4 py-2 text-sm font-semibold ring-1 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73]";
+  "shrink-0 rounded-full px-4 py-2 text-sm font-semibold ring-1 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 
 /** One-line, scrollable row of category chips (links to the category pages). */
 export default function CategoryStrip({
@@ -30,8 +30,8 @@ export default function CategoryStrip({
             className={cn(
               CHIP,
               !activeSlug
-                ? "bg-[#003B73] text-white ring-[#003B73]"
-                : "bg-white text-gray-700 ring-gray-900/10 hover:text-[#003B73] hover:ring-[#003B73]/40",
+                ? "bg-primary text-white ring-primary"
+                : "bg-white text-gray-700 ring-gray-900/10 hover:text-primary hover:ring-primary/40",
             )}
           >
             All products
@@ -48,8 +48,8 @@ export default function CategoryStrip({
                   CHIP,
                   "block",
                   active
-                    ? "bg-[#003B73] text-white ring-[#003B73]"
-                    : "bg-white text-gray-700 ring-gray-900/10 hover:text-[#003B73] hover:ring-[#003B73]/40",
+                    ? "bg-primary text-white ring-primary"
+                    : "bg-white text-gray-700 ring-gray-900/10 hover:text-primary hover:ring-primary/40",
                 )}
               >
                 {category.name}

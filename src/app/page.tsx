@@ -56,7 +56,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="bg-[#f7f8fa]">
+    <main className="bg-surface">
       <h1 className="sr-only">
         Yuricart Kenya — Shop electronics, phones, laptops and accessories
       </h1>

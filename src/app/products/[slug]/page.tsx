@@ -127,7 +127,7 @@ export default async function Page({ params }: PageProps) {
   ];
 
   return (
-    <main className="bg-[#f6f7f9] pb-6">
+    <main className="bg-surface pb-6">
       <div className="mx-auto max-w-[1280px] px-2 py-4 md:px-4 md:py-6">
         <JsonLd data={productJsonLd} />
         <JsonLd data={breadcrumbJsonLd} />
@@ -135,7 +135,7 @@ export default async function Page({ params }: PageProps) {
         <nav aria-label="Breadcrumb" className="mb-4 hidden lg:block">
           <ol className="flex items-center gap-1.5 text-sm text-gray-500">
             <li>
-              <Link href="/" className="transition-colors hover:text-[#003B73]">
+              <Link href="/" className="transition-colors hover:text-primary">
                 Home
               </Link>
             </li>
@@ -143,7 +143,7 @@ export default async function Page({ params }: PageProps) {
             <li>
               <Link
                 href={categorySlug ? `/collections/${categorySlug}` : "/shop"}
-                className="transition-colors hover:text-[#003B73]"
+                className="transition-colors hover:text-primary"
               >
                 {categoryName ?? "Shop"}
               </Link>
@@ -173,7 +173,7 @@ export default async function Page({ params }: PageProps) {
             <Expandable>
               {hasHtml(description) ? (
                 <div
-                  className="prose prose-gray max-w-none px-4 py-5 text-gray-700 md:px-6 prose-headings:font-serif prose-headings:text-gray-900 prose-a:text-[#003B73] prose-li:my-0.5"
+                  className="prose prose-gray max-w-none px-4 py-5 text-gray-700 md:px-6 prose-headings:prose-headings:text-gray-900 prose-a:text-primary prose-li:my-0.5"
                   dangerouslySetInnerHTML={{ __html: description }}
                 />
               ) : (

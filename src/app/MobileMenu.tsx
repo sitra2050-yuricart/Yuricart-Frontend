@@ -62,7 +62,7 @@ export default function MobileMenu({ collections }: MobileMenuProps) {
               <li>
                 <Link
                   href="/shop"
-                  className="font-serif font-bold uppercase tracking-wide hover:text-[#003B73]"
+                  className="font-bold uppercase tracking-wide hover:text-primary"
                 >
                   Shop All
                 </Link>
@@ -70,7 +70,7 @@ export default function MobileMenu({ collections }: MobileMenuProps) {
               <li>
                 <Link
                   href="/offers"
-                  className="font-serif font-bold uppercase tracking-wide text-primary hover:underline"
+                  className="font-bold uppercase tracking-wide text-cta hover:underline"
                 >
                   Offers
                 </Link>
@@ -79,7 +79,7 @@ export default function MobileMenu({ collections }: MobileMenuProps) {
                 <li key={collection._id}>
                   <Link
                     href={`/collections/${collection.slug}`}
-                    className="font-serif font-bold uppercase tracking-wide hover:text-[#003B73]"
+                    className="font-bold uppercase tracking-wide hover:text-primary"
                   >
                     {collection.name}
                   </Link>

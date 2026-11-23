@@ -12,7 +12,7 @@ const SORTS = [
 ];
 
 const FIELD =
-  "h-10 rounded-full border-0 bg-white px-4 text-sm text-gray-900 ring-1 ring-gray-900/10 transition placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#003B73]";
+  "h-10 rounded-full border-0 bg-white px-4 text-sm text-gray-900 ring-1 ring-gray-900/10 transition placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary";
 
 /** Result count, price range and sort. All state lives in the URL. */
 export default function ListingToolbar({ total }: { total: number }) {
@@ -73,7 +73,7 @@ export default function ListingToolbar({ total }: { total: number }) {
             onChange={(e) => setMin(e.target.value)}
             className={`${FIELD} w-24`}
           />
-          <span className="text-gray-400">–</span>
+          <span className="text-gray-500" aria-hidden="true">–</span>
           <input
             type="number"
             min={0}
@@ -86,7 +86,7 @@ export default function ListingToolbar({ total }: { total: number }) {
           />
           <button
             type="submit"
-            className="h-10 rounded-full bg-[#003B73] px-4 text-sm font-semibold text-white transition hover:bg-[#002f5d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] focus-visible:ring-offset-2"
+            className="h-10 rounded-full bg-primary px-4 text-sm font-semibold text-white transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             Apply
           </button>
@@ -94,7 +94,7 @@ export default function ListingToolbar({ total }: { total: number }) {
             <button
               type="button"
               onClick={() => push({ price_min: undefined, price_max: undefined })}
-              className="text-sm font-medium text-gray-500 underline-offset-2 hover:text-[#003B73] hover:underline"
+              className="text-sm font-medium text-gray-500 underline-offset-2 hover:text-primary hover:underline"
             >
               Clear
             </button>

@@ -46,7 +46,7 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
     <>
       <header className="sticky top-0 z-50">
         {/* Top blue bar */}
-        <div className="bg-[#003B73] text-white">
+        <div className="bg-primary text-white">
           <div className="mx-auto flex max-w-7xl items-center gap-3 px-3 py-3 md:gap-6 md:px-5 md:py-3.5">
             <Suspense>
               <div className="md:hidden">
@@ -65,7 +65,7 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
             </Link>
 
             <div className="min-w-0 flex-1">
-              <SearchField className="w-full [&_input]:h-10 [&_input]:rounded-full [&_input]:border-0 [&_input]:bg-white [&_input]:text-gray-900 [&_input]:placeholder:text-gray-400 md:[&_input]:h-11" />
+              <SearchField className="w-full [&_input]:h-10 [&_input]:rounded-full [&_input]:border-0 [&_input]:bg-white [&_input]:text-gray-900 [&_input]:placeholder:text-gray-500 md:[&_input]:h-11" />
             </div>
 
             <div className="hidden items-center gap-1 sm:gap-2 md:flex lg:gap-4">
@@ -92,7 +92,7 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
                   {totalQuantity > 0 && (
                     <span
                       aria-hidden="true"
-                      className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white"
+                      className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-cta px-1 text-[10px] font-bold leading-none text-white"
                     >
                       {totalQuantity}
                     </span>
@@ -123,7 +123,7 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
                 <li key={link.href + link.label} className="shrink-0">
                   <Link
                     href={link.href}
-                    className="whitespace-nowrap rounded font-serif text-xs font-bold uppercase tracking-wide text-gray-900 transition hover:text-[#003B73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] lg:text-sm"
+                    className="whitespace-nowrap rounded text-xs font-bold uppercase tracking-wide text-gray-900 transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:text-sm"
                   >
                     {link.label}
                   </Link>
@@ -132,7 +132,7 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
               <li className="shrink-0">
                 <Link
                   href="/offers"
-                  className="whitespace-nowrap rounded font-serif text-xs font-bold uppercase tracking-wide text-primary transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] lg:text-sm"
+                  className="whitespace-nowrap rounded text-xs font-bold uppercase tracking-wide text-cta transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:text-sm"
                 >
                   OFFERS
                 </Link>

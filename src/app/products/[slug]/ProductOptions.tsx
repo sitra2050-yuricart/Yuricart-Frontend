@@ -46,7 +46,7 @@ export default function ProductOptions({
                 <Label
                   htmlFor={choice.description}
                   className={cn(
-                    "flex min-w-14 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 transition hover:border-[#003B73] peer-checked:border-[#003B73] peer-checked:bg-[#003B73] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#003B73]/40",
+                    "flex min-w-14 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 transition hover:border-primary peer-checked:border-primary peer-checked:bg-primary peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-primary/40",
                     !checkInStock(product, {
                       ...selectedOptions,
                       [option.name || ""]: choice.description || "",
