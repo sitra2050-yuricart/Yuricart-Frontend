@@ -80,7 +80,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Build against the mock API
-        run: npm run build
+        run: npm run e2e:build
 
       - name: Run E2E
         run: npm run test:e2e
