@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { scrollBehavior } from "@/lib/motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductImage from "@/components/ProductImage";
@@ -36,7 +37,7 @@ export function scrollToSection(id: string): boolean {
     TABS_HEIGHT -
     4;
 
-  window.scrollTo({ top: targetY(), behavior: "smooth" });
+  window.scrollTo({ top: targetY(), behavior: scrollBehavior() });
   window.setTimeout(() => {
     if (Math.abs(window.scrollY - targetY()) > 4) {
       window.scrollTo({ top: targetY(), behavior: "auto" });
@@ -279,7 +280,7 @@ export function ProductRail({
   const scrollBy = useCallback((dir: 1 | -1) => {
     const el = scroller.current;
     if (!el) return;
-    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: "smooth" });
+    el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: scrollBehavior() });
   }, []);
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Product } from "@/lib/api/types";
 import HomeProductCard from "./HomeProductCard";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 
 interface ProductCarouselProps {
   title: string;
@@ -19,6 +20,7 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
   if (!products.length) return null;
 
@@ -89,7 +91,7 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
           touchStartPreventDefault={false}
           loop={canLoop}
           autoplay={
-            products.length > 1
+            products.length > 1 && !reducedMotion
               ? {
                   delay: 2200,
                   disableOnInteraction: false,

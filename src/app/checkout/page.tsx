@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import LoadingButton from "@/components/LoadingButton";
+import Link from "next/link";
+import { Field, FormError, SubmitButton } from "@/components/auth/Field";
 import { useCartStore } from "@/lib/cart/cart-store";
 import { createOrder } from "@/lib/api/orders";
 import { getCustomerToken } from "@/lib/api/auth";
 import { formatCurrency } from "@/lib/utils";
 import { getUnitPrice } from "@/lib/api/product-utils";
 import { StorefrontApiError } from "@/lib/api/client";
+import { isValidKenyanPhone } from "@/lib/phone";
 import { useClearCart } from "@/hooks/cart";
 import {
   Select,
@@ -20,10 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  trackAddPaymentInfo,
-  trackPurchase,
-} from "@/lib/metaPixel";
+import { trackAddPaymentInfo, trackPurchase } from "@/lib/metaPixel";
+
+type PaymentMethod = "cod" | "whatsapp" | "mpesa";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -31,7 +29,9 @@ export default function CheckoutPage() {
   const subtotal = useCartStore((s) => s.getSubtotal());
   const clearCartMutation = useClearCart();
   const [pending, setPending] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "whatsapp" | "mpesa">("cod");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("cod");
+  const [phoneError, setPhoneError] = useState("");
+  const [formError, setFormError] = useState("");
 
   const [form, setForm] = useState({
     customerName: "",
@@ -43,20 +43,35 @@ export default function CheckoutPage() {
     notes: "",
   });
 
+  const set =
+    (key: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
+      setForm((f) => ({ ...f, [key]: e.target.value }));
+
   if (!items.length) {
     return (
       <main className="mx-auto max-w-2xl px-5 py-16 text-center">
         <h1 className="text-3xl font-bold">Checkout</h1>
         <p className="mt-4 text-muted-foreground">Your cart is empty.</p>
-        <Button className="mt-6" asChild>
-          <a href="/shop">Continue shopping</a>
-        </Button>
+        <Link
+          href="/shop"
+          className="mt-6 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+        >
+          Continue shopping
+        </Link>
       </main>
     );
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setFormError("");
+
+    if (!isValidKenyanPhone(form.phone)) {
+      setPhoneError("Enter a Kenyan mobile number, like 0712 345 678.");
+      return;
+    }
+    setPhoneError("");
+
     setPending(true);
 
     try {
@@ -101,27 +116,34 @@ export default function CheckoutPage() {
       );
     } catch (error) {
       console.error(error);
-      alert(
+      setFormError(
         error instanceof StorefrontApiError && error.message
           ? error.message
-          : "Failed to place order. Please try again.",
+          : "We couldn't place your order. Check your connection and try again.",
       );
-    } finally {
       setPending(false);
     }
   }
 
   return (
     <main className="mx-auto max-w-3xl space-y-8 px-5 py-10">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4">
         <h1 className="text-3xl font-bold">Checkout</h1>
-        <Button variant="outline" asChild>
-          <a href="/shop">Continue Shopping</a>
-        </Button>
+        <Link
+          href="/shop"
+          className="inline-flex h-10 items-center rounded-full bg-white px-5 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/15 transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          Continue shopping
+        </Link>
       </div>
 
-      <section className="space-y-3 rounded-lg border p-5">
-        <h2 className="text-lg font-semibold">Order summary</h2>
+      <section
+        aria-labelledby="order-summary"
+        className="space-y-3 rounded-2xl bg-white p-5 ring-1 ring-gray-900/5"
+      >
+        <h2 id="order-summary" className="text-lg font-semibold">
+          Order summary
+        </h2>
         <ul className="space-y-2 text-sm">
           {items.map((item) => (
             <li key={item.lineId} className="flex justify-between gap-4">
@@ -141,66 +163,69 @@ export default function CheckoutPage() {
       </section>
 
       <form onSubmit={handleSubmit} className="space-y-5">
+        <FormError message={formError} />
+
         <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-1.5 sm:col-span-2">
-            <Label htmlFor="customerName">Full name</Label>
-            <Input
-              id="customerName"
+          <div className="sm:col-span-2">
+            <Field
+              label="Full name"
+              name="customerName"
+              autoComplete="name"
               required
               value={form.customerName}
-              onChange={(e) =>
-                setForm({ ...form, customerName: e.target.value })
-              }
+              onChange={set("customerName")}
             />
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              required
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="phone">Phone (WhatsApp)</Label>
-            <Input
-              id="phone"
-              required
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-            />
-          </div>
-          <div className="space-y-1.5 sm:col-span-2">
-            <Label htmlFor="address">Delivery address</Label>
-            <Input
-              id="address"
+          <Field
+            label="Email"
+            type="email"
+            name="email"
+            autoComplete="email"
+            required
+            value={form.email}
+            onChange={set("email")}
+          />
+          <Field
+            label="Phone (WhatsApp)"
+            type="tel"
+            name="phone"
+            autoComplete="tel"
+            inputMode="tel"
+            placeholder="0712 345 678"
+            required
+            error={phoneError}
+            value={form.phone}
+            onChange={set("phone")}
+          />
+          <div className="sm:col-span-2">
+            <Field
+              label="Delivery address"
+              name="address"
+              autoComplete="street-address"
               required
               value={form.address}
-              onChange={(e) => setForm({ ...form, address: e.target.value })}
+              onChange={set("address")}
             />
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="city">City</Label>
-            <Input
-              id="city"
-              required
-              value={form.city}
-              onChange={(e) => setForm({ ...form, city: e.target.value })}
-            />
-          </div>
+          <Field
+            label="City"
+            name="city"
+            autoComplete="address-level2"
+            required
+            value={form.city}
+            onChange={set("city")}
+          />
         </div>
 
         <div className="space-y-1.5">
-          <Label>Payment method</Label>
+          <label htmlFor="payment-method" className="text-sm font-medium text-gray-800">
+            Payment method
+          </label>
           <Select
             value={paymentMethod}
-            onValueChange={(v) =>
-              setPaymentMethod(v as "cod" | "whatsapp" | "mpesa")
-            }
+            onValueChange={(v) => setPaymentMethod(v as PaymentMethod)}
           >
-            <SelectTrigger>
+            <SelectTrigger id="payment-method" className="h-11 rounded-xl">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -211,9 +236,7 @@ export default function CheckoutPage() {
           </Select>
         </div>
 
-        <LoadingButton type="submit" loading={pending} size="lg" className="w-full">
-          Place order
-        </LoadingButton>
+        <SubmitButton pending={pending}>Place order</SubmitButton>
       </form>
     </main>
   );
