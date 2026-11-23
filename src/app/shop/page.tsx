@@ -34,7 +34,9 @@ function toPrice(value?: string): number | undefined {
 export async function generateMetadata({
   searchParams,
 }: PageProps): Promise<Metadata> {
-  const { q } = await searchParams;
+  const { q, price_min, price_max, sort, brand, in_stock } = await searchParams;
+  // Filtered and sorted views are duplicates of the main list: keep them out of search.
+  const filtered = Boolean(price_min || price_max || sort || brand || in_stock);
   if (q) {
     return buildPageMetadata({
       title: `Search results for "${q}"`,
@@ -49,6 +51,7 @@ export async function generateMetadata({
     description:
       "Browse phones, laptops, printers, and accessories at Yuricart Kenya. Fast delivery across Nairobi and Kenya.",
     path: "/shop",
+    noIndex: filtered,
   });
 }
 

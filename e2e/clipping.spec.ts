@@ -66,7 +66,7 @@ async function findClippedRings(page: Page) {
   });
 }
 
-const PAGES = ["/", "/shop", "/categories", "/collections/laptops", "/products/hp-elitebook-830-g5", "/offers", "/brands", "/login"];
+const PAGES = ["/", "/shop", "/categories", "/collections/laptops", "/products/hp-elitebook-830-g5", "/offers", "/brands", "/contact", "/faq", "/track", "/login"];
 
 for (const path of PAGES) {
   test(`no border or focus ring is clipped on ${path}`, async ({ page }) => {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ClearCart from "./ClearCart";
 import Order from "@/components/Order";
-import MpesaPayment from "@/components/ui/MpesaPayment";
+import ManualPaymentNotice from "@/components/ManualPaymentNotice";
 import { buildPageMetadata } from "@/lib/seo";
 
 interface PageProps {
@@ -41,13 +41,20 @@ export default async function Page({ searchParams }: PageProps) {
       <h2 className="text-2xl font-bold">Order details</h2>
       <Order order={order} />
 
-      <Link href="/profile" className="block text-primary hover:underline">
-        View all your orders
-      </Link>
+      <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+        <Link href="/track" className="block text-primary hover:underline">
+          Track your order
+        </Link>
+        <Link href="/profile" className="block text-primary hover:underline">
+          View all your orders
+        </Link>
+      </div>
 
       {orderCreatedDate &&
         orderCreatedDate.getTime() > Date.now() - 60_000 * 5 && <ClearCart />}
-      {order.paymentMethod === "mpesa" && <MpesaPayment order={order} />}
+      {(order.paymentMethod === "mpesa" || order.paymentMethod === "whatsapp") && (
+        <ManualPaymentNotice order={order} />
+      )}
     </main>
   );
 }

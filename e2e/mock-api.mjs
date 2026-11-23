@@ -53,6 +53,16 @@ for (const category of cats) {
   category.productCount = products.filter((x) => x.category.slug === category.slug).length;
 }
 
+// Delivery: 200 inside Nairobi, 800 elsewhere, free from 100,000.
+const quote = (subtotal, region) => {
+  const rate = /nairobi/i.test(region || "") ? 200 : 800;
+  return {
+    shipping: subtotal >= 100000 ? 0 : rate,
+    freeAbove: 100000,
+    zone: rate === 200 ? "Nairobi" : "Countrywide",
+  };
+};
+
 const ok = (data, meta) => ({ success: true, data, ...(meta ? { meta } : {}) });
 
 http
@@ -77,6 +87,16 @@ http
       if (to) return res.end(JSON.stringify(ok({ to, statusCode: 301 })));
       res.statusCode = 404;
       return res.end(JSON.stringify({ success: false, message: "No redirect for that path" }));
+    }
+
+    if (req.method === "POST" && p === "/shipping/quote") {
+      let raw = "";
+      req.on("data", (chunk) => (raw += chunk));
+      req.on("end", () => {
+        const input = JSON.parse(raw || "{}");
+        res.end(JSON.stringify(ok(quote(Number(input.subtotal) || 0, input.region))));
+      });
+      return;
     }
 
     // Orders: remember the last order so tests can check what the storefront sent.
@@ -108,9 +128,9 @@ http
           city: input.city,
           items,
           subtotal,
-          shipping: 500,
+          shipping: quote(subtotal, input.city).shipping,
           discount: 0,
-          total: subtotal + 500,
+          total: subtotal + quote(subtotal, input.city).shipping,
           paymentMethod: input.paymentMethod,
           paymentStatus: "pending",
           orderStatus: "pending",

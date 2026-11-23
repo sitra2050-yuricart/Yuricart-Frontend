@@ -8,6 +8,11 @@ const ROUTES = [
   { path: "/products/hp-elitebook-830-g5", name: "product" },
   { path: "/offers", name: "offers" },
   { path: "/brands", name: "brands" },
+  { path: "/about", name: "about" },
+  { path: "/contact", name: "contact" },
+  { path: "/faq", name: "faq" },
+  { path: "/privacy", name: "privacy" },
+  { path: "/track", name: "track" },
   { path: "/", name: "home (API down, fallback)" },
 ];
 

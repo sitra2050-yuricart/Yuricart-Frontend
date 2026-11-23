@@ -1,5 +1,6 @@
 import { getAllCategories, getProducts, hasProducts } from "@/lib/api";
 import { absoluteUrl } from "@/lib/seo";
+import { CONTENT_PAGES } from "@/content/pages";
 import { buildSitemapXml, type SitemapEntry } from "@/lib/sitemap";
 
 // Served as a route handler: the sitemap.ts metadata route returned 404 for
@@ -37,8 +38,15 @@ export async function GET() {
     { url: absoluteUrl("/offers"), lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: absoluteUrl("/brands"), lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: absoluteUrl("/categories"), lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: absoluteUrl("/terms"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];
+  for (const page of Object.values(CONTENT_PAGES)) {
+    entries.push({
+      url: absoluteUrl(`/${page.slug}`),
+      lastModified: now,
+      changeFrequency: "yearly",
+      priority: page.slug === "terms" || page.slug === "privacy" ? 0.3 : 0.5,
+    });
+  }
 
   try {
     const categories = await getAllCategories();
