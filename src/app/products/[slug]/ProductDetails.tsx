@@ -109,6 +109,9 @@ export default function ProductDetails({
     selectedVariant?.stock?.quantity ?? product.stock?.quantity ?? 0;
   const maxQuantity = Math.max(0, availableQuantity);
   const isOutOfStock = maxQuantity === 0 || !inStock;
+  // Products saved without a real price can't be ordered online (the server
+  // refuses them too); offer a WhatsApp price enquiry instead.
+  const priceUnavailable = !(getProductEffectivePrice(apiProduct) > 0);
 
   const selectedOptionsMedia = product.productOptions?.flatMap((option) => {
     const selectedChoice = option.choices?.find(
@@ -391,6 +394,19 @@ export default function ProductDetails({
               product={apiProduct}
               className="h-12 w-full rounded-xl bg-[#003B73] text-[15px] font-semibold hover:bg-[#002f5c]"
             />
+          ) : priceUnavailable ? (
+            <div className="fixed inset-x-0 bottom-[3.3rem] z-40 flex border-t border-gray-200 bg-white/95 p-2 shadow-[0_-8px_24px_-12px_rgba(16,24,40,0.25)] backdrop-blur md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
+              <WhatsAppOrderButton
+                phoneNumber={whatsappNumber}
+                productName={product.name ?? "Unnamed Product"}
+                productUrl={productUrl}
+                quantity={quantity}
+                salePrice={0}
+                enquiry
+                label="Ask for the price on WhatsApp"
+                className="h-12 w-full rounded-xl bg-[#1fa855] text-[15px] font-semibold shadow-sm hover:bg-[#188f48]"
+              />
+            </div>
           ) : (
             <div className="fixed inset-x-0 bottom-[3.3rem] z-40 flex gap-2 border-t border-gray-200 bg-white/95 p-2 shadow-[0_-8px_24px_-12px_rgba(16,24,40,0.25)] backdrop-blur md:static md:flex-col md:gap-3 md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
               <AddToCartButton
