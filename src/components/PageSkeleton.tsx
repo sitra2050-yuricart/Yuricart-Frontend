@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 
-/** Neutral page skeleton shown while a route streams in. */
-export default function Loading() {
+/** Neutral page skeleton for routes that stream in (used by loading.tsx files). */
+export default function PageSkeleton() {
   return (
     <div
       className="mx-auto max-w-[88rem] space-y-5 px-5 py-6 sm:py-8"

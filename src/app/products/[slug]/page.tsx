@@ -4,6 +4,7 @@ import {
   toLegacyProductDetail,
 } from "@/lib/api";
 import { notFound } from "next/navigation";
+import { orRedirectOnNotFound } from "@/lib/api/redirects";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import ProductDetails from "./ProductDetails";
@@ -44,7 +45,9 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const product = await orRedirectOnNotFound(`/products/${slug}`, () =>
+    getProductBySlug(slug),
+  );
 
   if (!product?._id) notFound();
 
@@ -73,7 +76,9 @@ async function loadRelated(slug: string): Promise<Product[]> {
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const apiProduct = await getProductBySlug(slug);
+  const apiProduct = await orRedirectOnNotFound(`/products/${slug}`, () =>
+    getProductBySlug(slug),
+  );
 
   if (!apiProduct?._id) notFound();
 

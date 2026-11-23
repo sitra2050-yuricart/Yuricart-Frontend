@@ -8,6 +8,7 @@ import {
 import { Category } from "@/lib/api/types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { orRedirectOnNotFound } from "@/lib/api/redirects";
 import {
   absoluteSeoTitle,
   buildBreadcrumbJsonLd,
@@ -42,7 +43,10 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const category = await getCategoryBySlug(slug);
+  const category = await orRedirectOnNotFound(
+    `/collections/${slug}`,
+    () => getCategoryBySlug(slug),
+  );
   if (!category?._id) notFound();
 
   const { seoTitle, metaDescription, imageAlt } = categorySeoDefaults(category);
@@ -63,7 +67,10 @@ export async function generateMetadata({
 export default async function Page({ params, searchParams }: PageProps) {
   const { slug } = await params;
   const { price_min, price_max, sort } = await searchParams;
-  const category = await getCategoryBySlug(slug);
+  const category = await orRedirectOnNotFound(
+    `/collections/${slug}`,
+    () => getCategoryBySlug(slug),
+  );
 
   if (!category?._id) notFound();
 
