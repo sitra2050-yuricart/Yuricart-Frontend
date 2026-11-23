@@ -127,3 +127,40 @@
 .styles-module_whatsappButton__tVits {
   bottom: 6rem !important;
 }
+
+/* Slim, rounded scrollbar for horizontal strips (e.g. product thumbnails). */
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Chromium / Safari: style the bar ourselves (drops the classic arrow buttons). */
+@supports selector(::-webkit-scrollbar) {
+  .thin-scrollbar {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 9999px;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #003b73;
+  }
+
+  .thin-scrollbar::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
