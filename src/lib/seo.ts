@@ -11,10 +11,27 @@ export const siteConfig = {
   twitterHandle: undefined as string | undefined,
 };
 
+export const PRODUCTION_SITE_URL = "https://www.yuricart.com";
+
+/**
+ * Canonical site origin. NEXT_PUBLIC_BASE_URL wins, except when it points at a
+ * Vercel deployment host (*.vercel.app): that value made every canonical, OG
+ * url and the sitemap line in robots.txt point at the preview domain.
+ */
+export function resolveSiteUrl(raw?: string): string {
+  const value = raw?.trim().replace(/\/+$/, "");
+  if (!value) return PRODUCTION_SITE_URL;
+  try {
+    const { hostname } = new URL(value);
+    if (hostname.endsWith(".vercel.app")) return PRODUCTION_SITE_URL;
+  } catch {
+    return PRODUCTION_SITE_URL;
+  }
+  return value;
+}
+
 export function getSiteUrl() {
-  const fromEnv = process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/+$/, "");
-  if (fromEnv) return fromEnv;
-  return "https://www.yuricart.com";
+  return resolveSiteUrl(process.env.NEXT_PUBLIC_BASE_URL);
 }
 
 export function absoluteUrl(path = "/") {

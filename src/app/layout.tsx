@@ -10,6 +10,7 @@ import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import AppChrome from "@/components/AppChrome";
 import MetaPixel from "@/components/MetaPixel";
 import Script from "next/script";
+import { getSiteUrl } from "@/lib/seo";
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
@@ -38,9 +39,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/logonew.svg",
   },
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || "https://www.yuricart.com/",
-  ),
+  metadataBase: new URL(getSiteUrl()),
   openGraph: {
     title: "Yuricart Kenya | Electronics Store",
     description:
