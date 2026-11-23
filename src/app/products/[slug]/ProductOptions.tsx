@@ -14,12 +14,14 @@ export default function ProductOptions({
   setSelectedOptions,
 }: ProductOptionsProps) {
   return (
-    <div className="space-y-2.5">
+    <div className="space-y-3">
       {product.productOptions?.map((option) => (
-        <fieldset key={option.name} className="space-y-1.5">
+        <fieldset key={option.name} className="space-y-2">
           <legend>
             <Label asChild>
-              <span>{option.name}</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                {option.name}
+              </span>
             </Label>
           </legend>
           <div className="flex flex-wrap items-center gap-1.5">
@@ -44,11 +46,11 @@ export default function ProductOptions({
                 <Label
                   htmlFor={choice.description}
                   className={cn(
-                    "flex min-w-14 cursor-pointer items-center justify-center gap-1.5 border p-2 peer-checked:border-primary",
+                    "flex min-w-14 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm font-medium text-gray-700 transition hover:border-[#003B73] peer-checked:border-[#003B73] peer-checked:bg-[#003B73] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-[#003B73]/40",
                     !checkInStock(product, {
                       ...selectedOptions,
                       [option.name || ""]: choice.description || "",
-                    }) && "opacity-50",
+                    }) && "line-through opacity-50",
                   )}
                 >
                   <span>{choice.description}</span>
