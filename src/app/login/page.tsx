@@ -1,117 +1,108 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import LoadingButton from "@/components/LoadingButton";
+import { useSearchParams } from "next/navigation";
+import AuthShell from "@/components/auth/AuthShell";
+import { Field, FormError, PasswordField, SubmitButton } from "@/components/auth/Field";
 import useAuth from "@/hooks/auth";
-import { trackCompleteRegistration } from "@/lib/metaPixel";
+import { loginCustomer } from "@/lib/api/auth";
+import { StorefrontApiError } from "@/lib/api/client";
+import { safeNextPath } from "@/lib/safe-redirect";
 
-export default function LoginPage() {
-  const { login, register, isLoggedIn } = useAuth();
-  const [mode, setMode] = useState<"login" | "register">("login");
+function LoginForm() {
+  const { isLoggedIn } = useAuth();
+  const params = useSearchParams();
+  const next = safeNextPath(params.get("next"));
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    phone: "",
-  });
+  const [error, setError] = useState("");
 
   if (isLoggedIn) {
     return (
-      <main className="mx-auto max-w-md px-5 py-16 text-center">
-        <p>You are already logged in.</p>
-        <Button className="mt-4" asChild>
-          <Link href="/profile">Go to profile</Link>
-        </Button>
-      </main>
+      <AuthShell title="You are already logged in">
+        <Link
+          href={next}
+          className="inline-flex h-11 w-full items-center justify-center rounded-full bg-[#003B73] px-6 text-sm font-semibold text-white transition hover:bg-[#002f5d]"
+        >
+          Continue
+        </Link>
+      </AuthShell>
     );
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setError("");
     setPending(true);
     try {
-      if (mode === "login") {
-        await login(form.email, form.password);
-      } else {
-        await register(form.name, form.email, form.password, form.phone);
-        trackCompleteRegistration({ status: true });
-      }
-      window.location.href = "/profile";
-    } catch {
-      // toast handled in hook
-    } finally {
+      await loginCustomer({ email, password });
+      window.location.href = next;
+    } catch (err) {
+      setError(
+        err instanceof StorefrontApiError
+          ? err.message
+          : "We couldn't log you in. Check your connection and try again.",
+      );
       setPending(false);
     }
   }
 
   return (
-    <main className="mx-auto max-w-md space-y-6 px-5 py-16">
-      <h1 className="text-3xl font-bold">
-        {mode === "login" ? "Login" : "Create account"}
-      </h1>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {mode === "register" && (
-          <>
-            <div className="space-y-1.5">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                required
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              />
-            </div>
-          </>
-        )}
-        <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            required
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-          />
+    <AuthShell
+      title="Log in"
+      subtitle="Track your orders and check out faster."
+      footer={
+        <>
+          New to Yuricart?{" "}
+          <Link
+            href={next === "/profile" ? "/register" : `/register?next=${encodeURIComponent(next)}`}
+            className="font-semibold text-[#003B73] hover:underline"
+          >
+            Create an account
+          </Link>
+        </>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-4" noValidate={false}>
+        <FormError message={error} />
+        <Field
+          label="Email"
+          type="email"
+          name="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <PasswordField
+          label="Password"
+          name="password"
+          autoComplete="current-password"
+          required
+          minLength={8}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-sm font-medium text-[#003B73] hover:underline"
+          >
+            Forgot password?
+          </Link>
         </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            required
-            minLength={8}
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
-        </div>
-        <LoadingButton type="submit" loading={pending} className="w-full">
-          {mode === "login" ? "Login" : "Register"}
-        </LoadingButton>
+        <SubmitButton pending={pending}>Log in</SubmitButton>
       </form>
+    </AuthShell>
+  );
+}
 
-      <button
-        type="button"
-        className="text-sm text-primary hover:underline"
-        onClick={() => setMode(mode === "login" ? "register" : "login")}
-      >
-        {mode === "login"
-          ? "Need an account? Register"
-          : "Already have an account? Login"}
-      </button>
-    </main>
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

@@ -75,3 +75,19 @@ export async function getCustomerMe(
     return null;
   }
 }
+
+export async function requestPasswordReset(email: string): Promise<string> {
+  const { data } = await apiRequest<{ message: string }>("/auth/forgot-password", {
+    method: "POST",
+    body: { email },
+  });
+  return data.message;
+}
+
+export async function resetPassword(token: string, password: string): Promise<string> {
+  const { data } = await apiRequest<{ message: string }>("/auth/reset-password", {
+    method: "POST",
+    body: { token, password },
+  });
+  return data.message;
+}
