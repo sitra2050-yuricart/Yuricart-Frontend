@@ -16,9 +16,9 @@ test.describe("keyboard and assistive technology", () => {
   test("the search box has a name and a real submit button", async ({ page }) => {
     await page.goto("/");
     const search = page.getByRole("search");
-    await expect(search.getByRole("searchbox", { name: "Search products" })).toBeVisible();
-    await search.getByRole("searchbox").fill("elitebook");
-    await search.getByRole("button", { name: "Search" }).click();
+    await expect(search.getByRole("combobox", { name: "Search products" })).toBeVisible();
+    await search.getByRole("combobox").fill("elitebook");
+    await search.getByRole("button", { name: "Search", exact: true }).click();
     await expect(page).toHaveURL(/\/shop\?q=elitebook/);
   });
 
