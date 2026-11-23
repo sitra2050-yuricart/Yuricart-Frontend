@@ -210,7 +210,7 @@ function SearchFieldInner({ className }: SearchFieldProps) {
           id={listId}
           role="listbox"
           aria-label="Product suggestions"
-          className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[70vh] overflow-y-auto rounded-2xl bg-white p-1.5 text-left text-gray-900 shadow-[0_12px_40px_-8px_rgba(16,24,40,0.35)] ring-1 ring-gray-900/10"
+          className="absolute left-0 right-0 top-full z-50 mt-2 max-h-[calc(100dvh-10rem)] overflow-y-auto md:max-h-[70vh] rounded-2xl bg-white p-1.5 text-left text-gray-900 shadow-[0_12px_40px_-8px_rgba(16,24,40,0.35)] ring-1 ring-gray-900/10"
         >
           {status === "loading" && items.length === 0 ? (
             <div aria-hidden className="space-y-1 p-1">
@@ -273,6 +273,11 @@ function SearchFieldInner({ className }: SearchFieldProps) {
   );
 }
 
+/** Some titles start with an emoji; leave it out of the compact list. */
+function plainTitle(title: string) {
+  return title.replace(/\p{Extended_Pictographic}️?\s*/gu, "").trim() || title;
+}
+
 function Suggestion({
   product,
   id,
@@ -314,7 +319,7 @@ function Suggestion({
         />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900">{product.title}</span>
+        <span className="line-clamp-2 text-sm font-semibold leading-snug text-gray-900">{plainTitle(product.title)}</span>
         <span className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm">
           {price > 0 ? (
             <>
