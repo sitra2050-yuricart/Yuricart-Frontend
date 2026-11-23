@@ -79,6 +79,9 @@ export interface Brand {
   name: string;
   slug: string;
   logo?: string;
+  image?: string | StorefrontImageData;
+  /** Active products with this brand (public API). Undefined on older APIs. */
+  productCount?: number;
   status?: "active" | "inactive";
   createdAt?: string;
   updatedAt?: string;
@@ -191,6 +194,8 @@ export interface ProductQueryParams {
   featured?: boolean;
   newArrival?: boolean;
   bestSeller?: boolean;
+  /** Only products with stock left. */
+  inStock?: boolean;
   tags?: string;
   page?: number;
   limit?: number;

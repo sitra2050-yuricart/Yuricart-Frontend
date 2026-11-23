@@ -6,7 +6,7 @@ import ListingToolbar from "./ListingToolbar";
 import ProductGrid, { GRID_CLASS } from "./ProductGrid";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchListingPage, type ListingQuery } from "@/app/shop/actions";
-import type { Category, PaginatedResult, Product } from "@/lib/api/types";
+import type { Brand, Category, PaginatedResult, Product } from "@/lib/api/types";
 
 interface ListingViewProps {
   title: string;
@@ -14,6 +14,7 @@ interface ListingViewProps {
   crumbs: Crumb[];
   categories: Category[];
   activeCategory?: string;
+  brands?: Brand[];
   query: ListingQuery;
 }
 
@@ -24,6 +25,7 @@ export default function ListingView({
   crumbs,
   categories,
   activeCategory,
+  brands = [],
   query,
 }: ListingViewProps) {
   return (
@@ -47,13 +49,13 @@ export default function ListingView({
       <CategoryStrip categories={categories} activeSlug={activeCategory} />
 
       <Suspense fallback={<ListingSkeleton />} key={JSON.stringify(query)}>
-        <Results query={query} />
+        <Results query={query} brands={brands} />
       </Suspense>
     </div>
   );
 }
 
-async function Results({ query }: { query: ListingQuery }) {
+async function Results({ query, brands }: { query: ListingQuery; brands: Brand[] }) {
   let result: PaginatedResult<Product>;
   try {
     result = await fetchListingPage(query, 1);
@@ -65,13 +67,17 @@ async function Results({ query }: { query: ListingQuery }) {
   }
 
   const hasFilters = Boolean(
-    query.q || query.minPrice !== undefined || query.maxPrice !== undefined,
+    query.q ||
+      query.brand ||
+      query.inStock ||
+      query.minPrice !== undefined ||
+      query.maxPrice !== undefined,
   );
 
   return (
     <div className="space-y-5">
       {result.items.length || hasFilters ? (
-        <ListingToolbar total={result.meta.total} />
+        <ListingToolbar total={result.meta.total} brands={brands} />
       ) : null}
       {result.items.length ? (
         <ProductGrid
@@ -90,14 +96,12 @@ async function Results({ query }: { query: ListingQuery }) {
               ? "Try a different search or price range."
               : "We have no products in this category right now."}
           </p>
-          {!hasFilters ? (
-            <Link
-              href="/shop"
-              className="mt-5 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90"
-            >
-              Browse all products
-            </Link>
-          ) : null}
+          <Link
+            href={hasFilters ? "?" : "/shop"}
+            className="mt-5 inline-flex h-11 items-center rounded-full bg-primary px-6 text-sm font-semibold text-white transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+          >
+            {hasFilters ? "Clear filters" : "Browse all products"}
+          </Link>
         </div>
       )}
     </div>

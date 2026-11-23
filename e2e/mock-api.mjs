@@ -34,6 +34,21 @@ const products = Array.from({ length: 24 }, (_, i) =>
   mk(i, `HP EliteBook 8${30 + i} G5`, 30000 + i * 1000, i % 5 === 0 ? { salePrice: 28000 + i * 900 } : {}),
 );
 
+const brands = [
+  { _id: "b1", name: "HP", slug: "hp" },
+  { _id: "b2", name: "Dell", slug: "dell" },
+  { _id: "b3", name: "Lenovo", slug: "lenovo" },
+  { _id: "b4", name: "Epson", slug: "epson" }, // no products: must be hidden
+];
+// Spread products over brands and sell a few out (product 0 stays in stock).
+products.forEach((product, i) => {
+  product.brand = brands[i % 3];
+  if (i % 7 === 3) product.stock = 0;
+});
+for (const brand of brands) {
+  brand.productCount = products.filter((x) => x.brand.slug === brand.slug).length;
+}
+
 for (const category of cats) {
   category.productCount = products.filter((x) => x.category.slug === category.slug).length;
 }
@@ -145,10 +160,14 @@ http
     }
 
     if (p === "/settings") body = ok({ whatsappNumber: "254768054542", shippingRate: 500 });
+    else if (p === "/brands") body = ok(brands, { page: 1, limit: 100, total: brands.length, totalPages: 1 });
     else if (p === "/categories") body = ok(cats, { page: 1, limit: 100, total: cats.length, totalPages: 1 });
     else if (/^\/categories\/[^/]+\/products$/.test(p) || p === "/products") {
       let list = products;
       if (p !== "/products") list = list.filter((x) => x.category.slug === p.split("/")[2]);
+      const brand = url.searchParams.get("brand");
+      if (brand) list = list.filter((x) => x.brand.slug === brand);
+      if (url.searchParams.get("inStock") === "true") list = list.filter((x) => x.stock > 0);
       const minPrice = url.searchParams.get("minPrice");
       const maxPrice = url.searchParams.get("maxPrice");
       if (minPrice) list = list.filter((x) => x.price >= Number(minPrice));

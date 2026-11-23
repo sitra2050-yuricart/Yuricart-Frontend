@@ -28,3 +28,22 @@ export async function getAllBrands(): Promise<Brand[]> {
   const { items } = await getBrands({ limit: 100, page: 1 });
   return items;
 }
+
+/** False only for brands known to have no products (older APIs omit the count). */
+export function brandHasProducts(brand: Brand): boolean {
+  return brand.productCount === undefined || brand.productCount > 0;
+}
+
+/** Brands worth listing: those with at least one active product. */
+export async function getNavBrands(): Promise<Brand[]> {
+  return (await getAllBrands()).filter(brandHasProducts);
+}
+
+/** Logo or image URL for a brand, if it has one. */
+export function getBrandLogoUrl(brand: Brand): string {
+  if (typeof brand.image === "string" && brand.image) return brand.image;
+  if (brand.image && typeof brand.image === "object" && brand.image.url) {
+    return brand.image.url;
+  }
+  return brand.logo || "";
+}

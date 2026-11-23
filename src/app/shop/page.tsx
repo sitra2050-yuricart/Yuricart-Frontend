@@ -1,6 +1,6 @@
 import ListingView from "@/components/listing/ListingView";
-import { getNavCategories, type ProductsSort } from "@/lib/api";
-import { Category } from "@/lib/api/types";
+import { getNavBrands, getNavCategories, type ProductsSort } from "@/lib/api";
+import { Brand, Category } from "@/lib/api/types";
 import { Metadata } from "next";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -10,6 +10,8 @@ interface PageProps {
     price_min?: string;
     price_max?: string;
     sort?: string;
+    brand?: string;
+    in_stock?: string;
   }>;
 }
 
@@ -51,7 +53,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const { q, price_min, price_max, sort } = await searchParams;
+  const { q, price_min, price_max, sort, brand, in_stock } = await searchParams;
 
   let categories: Category[] = [];
   try {
@@ -59,6 +61,8 @@ export default async function Page({ searchParams }: PageProps) {
   } catch {
     categories = [];
   }
+
+  const brands: Brand[] = await getNavBrands().catch(() => []);
 
   return (
     <ListingView
@@ -70,8 +74,11 @@ export default async function Page({ searchParams }: PageProps) {
       }
       crumbs={[{ label: "Home", href: "/" }, { label: q ? "Search" : "Shop" }]}
       categories={categories}
+      brands={brands}
       query={{
         q,
+        brand: brand || undefined,
+        inStock: in_stock === "1" || undefined,
         minPrice: toPrice(price_min),
         maxPrice: toPrice(price_max),
         sort: toSort(sort),

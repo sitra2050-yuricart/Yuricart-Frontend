@@ -34,6 +34,7 @@ test.describe("empty categories", () => {
   test("a filtered search with no results keeps the toolbar and says so", async ({ page }) => {
     await page.goto("/collections/laptops?price_min=900000");
     await expect(page.getByText("No products found")).toBeVisible();
-    await expect(page.getByLabel("Minimum price")).toBeVisible();
+    // the toolbar stays (filters are inline on desktop, in a sheet on phones)
+    await expect(page.getByText(/^0 products found$/)).toBeVisible();
   });
 });

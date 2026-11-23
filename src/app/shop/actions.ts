@@ -12,6 +12,9 @@ export interface ListingQuery {
   q?: string;
   /** Category slug; when set, the category endpoint is used. */
   category?: string;
+  /** Brand slug. */
+  brand?: string;
+  inStock?: boolean;
   minPrice?: number;
   maxPrice?: number;
   sort?: ProductsSort;
