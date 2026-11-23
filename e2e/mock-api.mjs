@@ -64,6 +64,54 @@ http
       return res.end(JSON.stringify({ success: false, message: "No redirect for that path" }));
     }
 
+    // Orders: remember the last order so tests can check what the storefront sent.
+    if (req.method === "GET" && p === "/__last-order") {
+      return res.end(JSON.stringify({ order: globalThis.__lastOrder ?? null }));
+    }
+    if (req.method === "POST" && p === "/orders") {
+      let raw = "";
+      req.on("data", (chunk) => (raw += chunk));
+      req.on("end", () => {
+        const input = JSON.parse(raw || "{}");
+        if (input.email === "reject@example.com") {
+          res.statusCode = 400;
+          return res.end(JSON.stringify({ success: false, message: "HP EliteBook 830 G5 is out of stock" }));
+        }
+        const items = (input.items || []).map((line) => {
+          const product = products.find((x) => x._id === line.productId);
+          const price = product?.salePrice && product.salePrice < product.price ? product.salePrice : product?.price ?? 0;
+          return { productId: line.productId, title: product?.title ?? "?", slug: product?.slug ?? "", price, quantity: line.quantity };
+        });
+        const subtotal = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+        const order = {
+          _id: "o1",
+          orderNumber: "YC-TEST-0001",
+          customerName: input.customerName,
+          email: input.email,
+          phone: input.phone,
+          address: input.address,
+          city: input.city,
+          items,
+          subtotal,
+          shipping: 500,
+          discount: 0,
+          total: subtotal + 500,
+          paymentMethod: input.paymentMethod,
+          paymentStatus: "pending",
+          orderStatus: "pending",
+        };
+        globalThis.__lastOrder = { request: input, order };
+        res.end(JSON.stringify(ok(order)));
+      });
+      return;
+    }
+    if (req.method === "GET" && p.startsWith("/orders/track/")) {
+      const order = globalThis.__lastOrder?.order;
+      if (order && p.endsWith(order.orderNumber)) return res.end(JSON.stringify(ok(order)));
+      res.statusCode = 404;
+      return res.end(JSON.stringify({ success: false, message: "Order not found" }));
+    }
+
     // Auth endpoints (POST): deterministic answers for the form tests.
     if (req.method === "POST" && p.startsWith("/auth/")) {
       let raw = "";
