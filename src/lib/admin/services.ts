@@ -1,4 +1,5 @@
 import { adminApiRequest } from "./api";
+import type { DeliveryRule } from "@/lib/delivery-rules";
 import {
   AdminUser,
   AdminHomepageData,
@@ -195,4 +196,20 @@ export function updateAdminSettings(body: Record<string, unknown>) {
     method: "PATCH",
     body,
   });
+}
+
+export function getAdminShippingRules(params: Record<string, string | number | boolean | undefined>) {
+  return adminApiRequest<DeliveryRule[]>("/admin/shipping", { params });
+}
+
+export function createAdminShippingRule(body: Record<string, unknown>) {
+  return adminApiRequest<DeliveryRule>("/admin/shipping", { method: "POST", body });
+}
+
+export function updateAdminShippingRule(id: string, body: Record<string, unknown>) {
+  return adminApiRequest<DeliveryRule>(`/admin/shipping/${id}`, { method: "PATCH", body });
+}
+
+export function deleteAdminShippingRule(id: string) {
+  return adminApiRequest<{ id: string }>(`/admin/shipping/${id}`, { method: "DELETE" });
 }
