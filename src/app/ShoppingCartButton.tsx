@@ -21,11 +21,12 @@ import {
 } from "@/lib/cart/cart-store";
 import { Loader2, ShoppingCartIcon, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCartDrawer } from "@/components/ui/CartDrawerContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useCartHydrated } from "@/hooks/useCartHydrated";
+import { getUnitPrice } from "@/lib/api/product-utils";
 
 interface ShoppingCartButtonProps {
   initialData: LegacyCart | null;
@@ -35,6 +36,7 @@ export default function ShoppingCartButton({
   initialData,
 }: ShoppingCartButtonProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { toast } = useToast();
   const { isOpen, openDrawer, closeDrawer } = useCartDrawer();
   const [checkoutPending, setCheckoutPending] = useState(false);
@@ -42,6 +44,19 @@ export default function ShoppingCartButton({
   const items = useCartStore((s) => s.items);
 
   const cartQuery = useCart(initialData);
+
+  // This drawer lives in the header, so it outlives the page change it triggers.
+  // The spinner only belongs to the navigation in flight: clear it when the page
+  // has changed and whenever the cart is opened again.
+  useEffect(() => {
+    setCheckoutPending(false);
+  }, [pathname]);
+  useEffect(() => {
+    if (isOpen) setCheckoutPending(false);
+  }, [isOpen]);
+
+  // An item with no price cannot be ordered (the API refuses it).
+  const hasUnpricedItem = items.some((item) => getUnitPrice(item) <= 0);
 
   const totalQuantity = hydrated
     ? items.reduce((acc, item) => acc + (item.quantity || 0), 0)
@@ -53,6 +68,8 @@ export default function ShoppingCartButton({
       return;
     }
     closeDrawer();
+    // Already on the checkout: there is nowhere to navigate, so do not spin.
+    if (pathname === "/checkout") return;
     setCheckoutPending(true);
     router.push("/checkout");
   }
@@ -125,6 +142,11 @@ export default function ShoppingCartButton({
             Continue Shopping
           </Link>
           <hr />
+          {hasUnpricedItem ? (
+            <p role="alert" className="rounded-xl bg-amber-50 px-3 py-2 text-sm text-amber-900 ring-1 ring-amber-200">
+              Remove items without a price to check out, or ask us on WhatsApp for the price.
+            </p>
+          ) : null}
           <div className="flex items-center justify-between gap-5">
             <div className="space-y-0.5">
               <p className="text-sm">Subtotal amount:</p>
@@ -139,7 +161,7 @@ export default function ShoppingCartButton({
               onClick={handleCheckout}
               loading={checkoutPending}
               size="lg"
-              disabled={!totalQuantity}
+              disabled={!totalQuantity || hasUnpricedItem}
             >
               Checkout
             </LoadingButton>
