@@ -46,6 +46,19 @@ http
     const p = url.pathname;
     let body;
 
+    // Old paths that should redirect (renamed category, renamed product).
+    if (p === "/redirects/resolve") {
+      const map = {
+        "/collections/modio": "/collections/laptops",
+        "/products/old-elitebook-name": "/products/hp-elitebook-830-g5",
+        "/legacy-page": "/shop",
+      };
+      const to = map[url.searchParams.get("path")];
+      if (to) return res.end(JSON.stringify(ok({ to, statusCode: 301 })));
+      res.statusCode = 404;
+      return res.end(JSON.stringify({ success: false, message: "No redirect for that path" }));
+    }
+
     if (p === "/settings") body = ok({ whatsappNumber: "254768054542", shippingRate: 500 });
     else if (p === "/categories") body = ok(cats, { page: 1, limit: 100, total: cats.length, totalPages: 1 });
     else if (/^\/categories\/[^/]+\/products$/.test(p) || p === "/products") {
