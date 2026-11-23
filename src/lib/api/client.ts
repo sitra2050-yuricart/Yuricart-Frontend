@@ -37,22 +37,35 @@ export async function apiRequest<T>(
     });
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
+  const method = (rest.method || "GET").toUpperCase();
+  // Reads are safe to repeat: retry once on a network error, timeout or 5xx so a
+  // single flaky call does not blank the homepage or empty the menu.
+  const attempts = method === "GET" ? 2 : 1;
 
-  const response = await fetch(url.toString(), {
-    ...rest,
-    cache,
-    next,
-    signal: controller.signal,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
-
-  clearTimeout(timeout);
+  let response!: Response;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+    try {
+      response = await fetch(url.toString(), {
+        ...rest,
+        cache,
+        next,
+        signal: controller.signal,
+        headers: {
+          "Content-Type": "application/json",
+          ...headers,
+        },
+        body: body !== undefined ? JSON.stringify(body) : undefined,
+      });
+      if (response.status < 500 || attempt === attempts) break;
+    } catch (error) {
+      if (attempt === attempts) throw error;
+    } finally {
+      clearTimeout(timeout);
+    }
+    await new Promise((resolve) => setTimeout(resolve, 400));
+  }
 
   let json: ApiResponse<T>;
   try {

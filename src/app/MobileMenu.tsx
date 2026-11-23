@@ -67,6 +67,14 @@ export default function MobileMenu({ collections }: MobileMenuProps) {
                   Shop All
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/offers"
+                  className="font-serif font-bold uppercase tracking-wide text-primary hover:underline"
+                >
+                  Offers
+                </Link>
+              </li>
               {collections.map((collection) => (
                 <li key={collection._id}>
                   <Link

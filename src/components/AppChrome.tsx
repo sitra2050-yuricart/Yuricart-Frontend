@@ -19,9 +19,10 @@ export default function AppChrome({
 }: AppChromeProps) {
   const pathname = usePathname();
   const isAdminRoute = pathname.startsWith("/admin");
-  const isLoginRoute = pathname === "/login";
 
-  if (isAdminRoute || isLoginRoute) {
+  // Only the admin area has its own chrome. Login, checkout and the 404 page keep
+  // the standard header and footer so shoppers can always get back to the store.
+  if (isAdminRoute) {
     return <>{children}</>;
   }
 

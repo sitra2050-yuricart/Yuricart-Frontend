@@ -14,7 +14,6 @@ import { Gift, ShoppingCart, ChevronDown } from "lucide-react";
 import { useCartDrawer } from "@/components/ui/CartDrawerContext";
 import { useCartStore } from "@/lib/cart/cart-store";
 import { useCartHydrated } from "@/hooks/useCartHydrated";
-import { cn } from "@/lib/utils";
 
 interface NavbarClientProps {
   collections: Category[];
@@ -71,27 +70,35 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
 
             <div className="hidden items-center gap-1 sm:gap-2 md:flex lg:gap-4">
               <Link
-                href="/shop"
-                className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-white/95 transition hover:bg-white/10"
+                href="/offers"
+                className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-white/95 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                <Gift className="size-5" />
+                <Gift className="size-5" aria-hidden="true" />
                 <span className="hidden lg:inline">Offers</span>
               </Link>
 
               <button
                 type="button"
                 onClick={openDrawer}
-                aria-label={`Open cart, ${totalQuantity} items`}
-                className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-white/95 transition hover:bg-white/10"
+                aria-label={
+                  totalQuantity > 0
+                    ? `Open cart, ${totalQuantity} ${totalQuantity === 1 ? "item" : "items"}`
+                    : "Open cart, empty"
+                }
+                className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-white/95 transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
-                <ShoppingCart className="size-5" aria-hidden="true" />
-                <span className="hidden lg:inline">
-                  Cart{" "}
-                  <span className="text-white/80">Item {totalQuantity}</span>
+                <span className="relative">
+                  <ShoppingCart className="size-5" aria-hidden="true" />
+                  {totalQuantity > 0 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-white"
+                    >
+                      {totalQuantity}
+                    </span>
+                  )}
                 </span>
-                <span className="lg:hidden" aria-hidden="true">
-                  {totalQuantity}
-                </span>
+                <span className="hidden lg:inline">Cart</span>
               </button>
 
               <div className="flex items-center text-white">
@@ -106,19 +113,31 @@ export default function NavbarClient({ collections }: NavbarClientProps) {
         </div>
 
         {/* Category navigation */}
-        <nav className="hidden border-b border-gray-200 bg-white md:block">
-          <div className="mx-auto flex max-w-7xl items-center justify-center gap-1 overflow-x-auto px-4 py-2.5 [-ms-overflow-style:none] [scrollbar-width:none] md:gap-6 lg:gap-8 [&::-webkit-scrollbar]:hidden">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href + link.label}
-                href={link.href}
-                className={cn(
-                  "whitespace-nowrap font-serif text-xs font-bold uppercase tracking-wide text-gray-900 transition hover:text-[#003B73] lg:text-sm",
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+        <nav
+          aria-label="Categories"
+          className="hidden border-b border-gray-200 bg-white md:block"
+        >
+          <div className="mx-auto max-w-7xl px-4 py-2.5">
+            <ul className="thin-scrollbar mx-auto flex w-max max-w-full items-center gap-5 overflow-x-auto lg:gap-7">
+              {navLinks.map((link) => (
+                <li key={link.href + link.label} className="shrink-0">
+                  <Link
+                    href={link.href}
+                    className="whitespace-nowrap rounded font-serif text-xs font-bold uppercase tracking-wide text-gray-900 transition hover:text-[#003B73] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] lg:text-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li className="shrink-0">
+                <Link
+                  href="/offers"
+                  className="whitespace-nowrap rounded font-serif text-xs font-bold uppercase tracking-wide text-primary transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#003B73] lg:text-sm"
+                >
+                  OFFERS
+                </Link>
+              </li>
+            </ul>
           </div>
         </nav>
 

@@ -6,6 +6,8 @@ const ROUTES = [
   { path: "/categories", name: "categories" },
   { path: "/collections/laptops", name: "collection" },
   { path: "/products/hp-elitebook-830-g5", name: "product" },
+  { path: "/offers", name: "offers" },
+  { path: "/", name: "home (API down, fallback)" },
 ];
 
 for (const route of ROUTES) {
@@ -22,7 +24,7 @@ for (const route of ROUTES) {
 
       await expect(page.locator("h1")).toHaveCount(1);
       const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
-      expect(canonical).toMatch(/^https:\/\/www\.yuricart\.com\//);
+      expect(canonical).toMatch(/^https:\/\/www\.yuricart\.com(\/|$)/);
 
       // Ignore failed image requests for the data: placeholders; everything else counts.
       expect(errors.filter((e) => !/favicon|Failed to load resource/.test(e))).toEqual([]);
@@ -67,8 +69,31 @@ test("sitemap.xml and robots.txt use the real host", async ({ request }) => {
   expect(robots).toContain("Sitemap: https://www.yuricart.com/sitemap.xml");
 });
 
-test.fixme("homepage never shows a bare error when the API is down (Phase 1)", async ({ page }) => {
-  // The mock API answers /homepage with 500. Expect real navigation, not a dead end.
+test("homepage never shows a bare error when the API is down", async ({ page }) => {
+  // The mock API answers /homepage with 500. Expect real content, not a dead end.
   await page.goto("/");
   await expect(page.getByText("Unable to load homepage")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Shop all products" }).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "New arrivals" })).toBeVisible();
+});
+
+test("unknown URLs get a helpful 404 with search and categories", async ({ page }) => {
+  const response = await page.goto("/this-page-does-not-exist");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { name: /couldn.t find that page/i })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Laptops" }).first()).toBeVisible();
+});
+
+test("the login page keeps the standard header and footer", async ({ page }) => {
+  await page.goto("/login");
+  await expect(page.locator("header")).toBeVisible();
+  await expect(page.locator("footer")).toBeVisible();
+});
+
+test("offers lists only discounted products", async ({ page }) => {
+  await page.goto("/offers");
+  const cards = page.locator('a[href^="/products/"]');
+  expect(await cards.count()).toBeGreaterThan(0);
+  // every card on this page carries a discount pill
+  await expect(page.getByText(/^-\d+%$/)).toHaveCount(await cards.count());
 });
