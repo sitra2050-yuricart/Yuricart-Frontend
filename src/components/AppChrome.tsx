@@ -29,8 +29,16 @@ export default function AppChrome({
   return (
     <WhatsAppSettingsProvider>
       <CartDrawerProvider>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-full focus:bg-white focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-primary focus:shadow-lg focus:ring-2 focus:ring-primary"
+        >
+          Skip to main content
+        </a>
         {navbar}
-        <div className="min-h-[50vh]">{children}</div>
+        <div id="main-content" tabIndex={-1} className="min-h-[50vh] outline-none">
+          {children}
+        </div>
         {footer}
         {whatsapp}
       </CartDrawerProvider>

@@ -34,12 +34,12 @@ export default function MobileBottomNav() {
     : 0;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white shadow-inner lg:hidden">
+    <nav aria-label="Main" className="fixed bottom-0 left-0 right-0 z-50 border-t border-gray-200 bg-white shadow-inner lg:hidden">
       <ul className="flex items-center justify-around py-2">
         <li>
           <Link
             href="/"
-            className="flex flex-col items-center text-xs text-gray-600"
+            className="flex flex-col items-center text-xs text-gray-700 rounded-lg px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Home className="h-5 w-5" />
             <span>Home</span>
@@ -49,7 +49,7 @@ export default function MobileBottomNav() {
         <li>
           <Link
             href="/shop"
-            className="flex flex-col items-center text-xs text-gray-600"
+            className="flex flex-col items-center text-xs text-gray-700 rounded-lg px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <ShoppingBag className="h-5 w-5" />
             <span>Shop</span>
@@ -65,7 +65,7 @@ export default function MobileBottomNav() {
                 ? `Open cart, ${totalQuantity} ${totalQuantity === 1 ? "item" : "items"}`
                 : "Open cart, empty"
             }
-            className="relative flex flex-col items-center text-xs text-gray-600"
+            className="relative flex flex-col items-center text-xs text-gray-700 rounded-lg px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <ShoppingCart className="h-5 w-5" aria-hidden="true" />
             {totalQuantity > 0 && (
@@ -83,7 +83,7 @@ export default function MobileBottomNav() {
         <li>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex flex-col items-center text-xs text-gray-600">
+              <button className="flex flex-col items-center text-xs text-gray-700 rounded-lg px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                 <User className="h-5 w-5" />
                 <span>Account</span>
               </button>

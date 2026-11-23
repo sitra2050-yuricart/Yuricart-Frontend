@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import Image from "next/image";
 import Link from "next/link";
 import { HomepageBannerItem } from "@/lib/api/homepage";
@@ -66,6 +67,7 @@ function StaticHero({ slide }: { slide: HomepageBannerItem }) {
 
 export default function HeroSlider({ slides }: HeroSliderProps) {
   const activeSlides = slides.filter((s) => s.imageUrl);
+  const reducedMotion = usePrefersReducedMotion();
   const [SwiperParts, setSwiperParts] = useState<{
     Swiper: typeof import("swiper/react").Swiper;
     SwiperSlide: typeof import("swiper/react").SwiperSlide;
@@ -129,7 +131,7 @@ export default function HeroSlider({ slides }: HeroSliderProps) {
         navigation={activeSlides.length > 1}
         loop={activeSlides.length > 1}
         autoplay={
-          activeSlides.length > 1
+          activeSlides.length > 1 && !reducedMotion
             ? { delay: 4000, disableOnInteraction: false }
             : false
         }

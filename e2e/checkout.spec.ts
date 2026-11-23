@@ -71,18 +71,33 @@ test.describe("order flow (guest, cash on delivery)", () => {
     await page.getByLabel("Delivery address").fill("Moi Avenue");
     await page.getByLabel("City").fill("Nairobi");
 
-    // The checkout reports errors with alert(); handle it inside the listener.
-    const messages: string[] = [];
+    // The error appears inline, announced to screen readers, and nothing pops up.
+    let dialogs = 0;
     page.on("dialog", async (dialog) => {
-      messages.push(dialog.message());
+      dialogs += 1;
       await dialog.dismiss();
     });
     await page.getByRole("button", { name: "Place order" }).click();
-    await expect.poll(() => messages.length).toBeGreaterThan(0);
-    expect(messages[0]).toContain("out of stock");
+    await expect(page.locator("form").getByRole("alert")).toContainText("out of stock");
+    expect(dialogs).toBe(0);
 
     await expect(page).toHaveURL(/\/checkout$/);
     await expect(page.getByText(/HP EliteBook 830 G5 x 1/)).toBeVisible();
+  });
+
+  test("a phone number that is not Kenyan is caught before the order is sent", async ({ page, request }) => {
+    await addToCart(page);
+    await page.goto("/checkout");
+    await page.getByLabel("Full name").fill("Amina Wanjiru");
+    await page.getByLabel("Email").fill("amina@example.com");
+    await page.getByLabel("Phone (WhatsApp)").fill("12345");
+    await page.getByLabel("Delivery address").fill("Moi Avenue");
+    await page.getByLabel("City").fill("Nairobi");
+    await page.getByRole("button", { name: "Place order" }).click();
+
+    await expect(page.locator("form").getByRole("alert")).toContainText("Kenyan mobile number");
+    await expect(page.getByLabel("Phone (WhatsApp)")).toHaveAttribute("aria-invalid", "true");
+    await expect(page).toHaveURL(/\/checkout$/);
   });
 
   test("checkout with an empty cart explains and links back to the shop", async ({ page }) => {
