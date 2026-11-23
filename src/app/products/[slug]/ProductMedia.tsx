@@ -31,17 +31,17 @@ export default function ProductMedia({ media }: ProductMediaProps) {
   const selectedVideo = selectedMedia?.video?.files?.[0];
 
   return (
-    <div className="h-fit basis-2/5 space-y-5 md:sticky md:top-10">
-      <div className="aspect-[4/5] overflow-hidden bg-secondary">
+    <div className="w-full">
+      <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-white">
         {selectedImage?.url ? (
           <Zoom key={selectedImage.url}>
             <ProductImage
               src={selectedImage.url}
               alt={selectedImage.altText}
               width={800}
-              height={1000}
-              sizes="(max-width: 768px) 100vw, 40vw"
-              className="h-full w-full object-cover"
+              height={800}
+              sizes="(max-width: 768px) 100vw, 30vw"
+              className="h-full w-full object-contain"
               priority
             />
           </Zoom>
@@ -68,7 +68,7 @@ export default function ProductMedia({ media }: ProductMediaProps) {
         ) : null}
       </div>
       {media.length > 1 && (
-        <div className="flex flex-wrap gap-5">
+        <div className="mt-3 flex gap-2.5 overflow-x-auto p-1">
           {media.map((mediaItem, index) => (
             <MediaPreview
               key={
@@ -107,8 +107,8 @@ function MediaPreview({ mediaItem, isSelected, onSelect }: MediaPreviewProps) {
   return (
     <div
       className={cn(
-        "relative size-[100px] cursor-pointer bg-secondary",
-        isSelected && "outline outline-1 outline-primary",
+        "relative size-16 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white transition hover:border-[#003B73]/50",
+        isSelected && "border-[#003B73] ring-2 ring-[#003B73]/30",
       )}
       onMouseEnter={onSelect}
       onClick={onSelect}
@@ -122,9 +122,9 @@ function MediaPreview({ mediaItem, isSelected, onSelect }: MediaPreviewProps) {
         <ProductImage
           src={resolvedThumbnailUrl}
           alt={mediaItem.image?.altText || mediaItem.video?.files?.[0]?.altText}
-          width={100}
-          height={100}
-          className="size-full object-cover"
+          width={64}
+          height={64}
+          className="size-full object-contain"
         />
       ) : videoUrl ? (
         <div className="flex size-full items-center justify-center bg-black">
@@ -140,8 +140,8 @@ function MediaPreview({ mediaItem, isSelected, onSelect }: MediaPreviewProps) {
         <div className="size-full bg-muted" />
       )}
       {videoUrl ? (
-        <span className="absolute left-1/2 top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/40">
-          <PlayIcon className="size-5 text-white/60" />
+        <span className="absolute left-1/2 top-1/2 flex size-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/40">
+          <PlayIcon className="size-4 text-white/70" />
         </span>
       ) : null}
     </div>

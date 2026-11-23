@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { trackLead } from "@/lib/metaPixel";
 import { useWhatsAppNumber } from "@/components/WhatsAppSettingsProvider";
 
 export default function WhatsAppButton() {
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  // Product pages have a sticky Add to cart / Buy now bar on mobile; sit above it.
+  const onProductPage = pathname?.startsWith("/products/");
   const whatsappNumber = useWhatsAppNumber();
 
   useEffect(() => {
@@ -25,7 +30,7 @@ export default function WhatsAppButton() {
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
       onClick={() => trackLead({ content_name: "Floating WhatsApp" })}
-      className="fixed bottom-20 right-4 z-50 flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:scale-105 hover:bg-[#1ebe57] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] md:bottom-6 md:right-6"
+      className={cn("fixed bottom-20 right-4 z-50 flex size-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition hover:scale-105 hover:bg-[#1ebe57] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366] md:bottom-6 md:right-6", onProductPage && "bottom-36 md:bottom-6")}
     >
       <svg
         aria-hidden="true"
