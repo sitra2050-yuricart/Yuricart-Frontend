@@ -197,7 +197,7 @@ function SearchFieldInner({ className }: SearchFieldProps) {
         </button>
       </div>
 
-      <p className="sr-only" role="status" aria-live="polite">
+      <p className="sr-only" aria-live="polite">
         {showPanel && status === "ready"
           ? items.length
             ? `${items.length} suggestions available`
