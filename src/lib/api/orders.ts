@@ -31,14 +31,24 @@ export async function createOrder(
   return data;
 }
 
+/** Look an order up with the checkout email, or with the token from an emailed link. */
 export async function trackOrder(
   orderNumber: string,
-  email: string,
+  access: { email?: string; token?: string },
 ): Promise<Order> {
   const { data } = await apiRequest<Order>(`/orders/track/${orderNumber}`, {
-    params: { email },
+    params: access.token ? { token: access.token } : { email: access.email },
   });
   return data;
+}
+
+/** Emails the order numbers placed with an address. The answer never says whether any exist. */
+export async function requestOrderNumbers(email: string): Promise<string> {
+  const { data } = await apiRequest<{ message: string }>("/orders/lookup", {
+    method: "POST",
+    body: { email },
+  });
+  return data.message;
 }
 
 export async function getMyOrders(token: string): Promise<Order[]> {

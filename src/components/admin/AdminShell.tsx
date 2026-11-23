@@ -14,6 +14,7 @@ import {
   ShoppingCart,
   Ticket,
   Settings,
+  Truck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/admin/brands", label: "Brands", icon: Tag },
   { href: "/admin/homepage", label: "Homepage", icon: ImageIcon },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/admin/delivery", label: "Delivery", icon: Truck },
   { href: "/admin/coupons", label: "Coupons", icon: Ticket },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];

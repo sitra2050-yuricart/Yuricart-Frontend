@@ -6,6 +6,7 @@ export interface CustomerUser {
   email: string;
   phone?: string;
   role: string;
+  emailVerified?: boolean;
 }
 
 export interface AuthResponse {
@@ -88,6 +89,22 @@ export async function resetPassword(token: string, password: string): Promise<st
   const { data } = await apiRequest<{ message: string }>("/auth/reset-password", {
     method: "POST",
     body: { token, password },
+  });
+  return data.message;
+}
+
+export async function verifyEmail(token: string): Promise<string> {
+  const { data } = await apiRequest<{ message: string }>("/auth/verify-email", {
+    method: "POST",
+    body: { token },
+  });
+  return data.message;
+}
+
+export async function resendVerification(): Promise<string> {
+  const { data } = await apiRequest<{ message: string }>("/auth/resend-verification", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${getCustomerToken()}` },
   });
   return data.message;
 }
