@@ -25,7 +25,7 @@ export default async function Page({ searchParams }: PageProps) {
     notFound();
   }
 
-  const order = await trackOrder(orderNumber, email);
+  const order = await trackOrder(orderNumber, { email });
 
   if (!order) {
     notFound();

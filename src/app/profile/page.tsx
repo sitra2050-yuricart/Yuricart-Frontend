@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Orders from "./Orders";
 import MemberInfoForm from "./MemberInfoForm";
+import VerifyEmailNotice from "./VerifyEmailNotice";
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -38,6 +39,7 @@ export default function ProfilePage() {
       <h1 className="text-center text-3xl font-bold md:text-4xl">
         Your profile
       </h1>
+      <VerifyEmailNotice user={user} />
       <MemberInfoForm user={user} />
       <Orders />
     </main>
