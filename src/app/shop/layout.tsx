@@ -1,20 +1,5 @@
-import { getAllCategories } from "@/lib/api";
-import { Category } from "@/lib/api/types";
-import SearchFilterLayout from "./SearchFilterLayout";
-
-export default async function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  let categories: Category[] = [];
-  try {
-    categories = await getAllCategories();
-  } catch {
-    categories = [];
-  }
-
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <SearchFilterLayout collections={categories}>{children}</SearchFilterLayout>
+    <main className="mx-auto max-w-[88rem] px-5 py-6 sm:py-8">{children}</main>
   );
 }

@@ -1,6 +1,10 @@
 // Clean redeploy after malware removal (2026-11-18).
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    // /products has no page of its own; the product list lives at /shop.
+    return [{ source: "/products", destination: "/shop", permanent: true }];
+  },
   experimental: {
     staleTimes: {
       dynamic: 30,
