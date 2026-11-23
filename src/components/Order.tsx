@@ -48,7 +48,7 @@ export default function Order({ order }: OrderProps) {
         <div className="basis-96">
           <div className="space-y-0.5">
             <div className="flex items-center gap-3 font-semibold">
-              <span>Subtotal: {formatCurrency(order.total)}</span>
+              <span>Total: {formatCurrency(order.total)}</span>
               <Badge
                 className={cn(
                   "bg-secondary text-secondary-foreground",
@@ -59,6 +59,11 @@ export default function Order({ order }: OrderProps) {
                 {paymentStatusMap[order.paymentStatus] || order.paymentStatus}
               </Badge>
             </div>
+            {order.shipping > 0 && (
+              <div className="text-muted-foreground">
+                Includes delivery: {formatCurrency(order.shipping)}
+              </div>
+            )}
             <div className="font-semibold">
               {orderStatusMap[order.orderStatus] || order.orderStatus}
             </div>
@@ -75,7 +80,7 @@ export default function Order({ order }: OrderProps) {
           <p>{order.email}</p>
           <p>{order.phone}</p>
           <p>{order.address}</p>
-          <p>{order.city}</p>
+          <p>{[order.city, order.county].filter(Boolean).join(", ")}</p>
         </div>
       </div>
     </div>

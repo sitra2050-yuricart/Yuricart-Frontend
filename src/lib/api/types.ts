@@ -165,6 +165,7 @@ export interface Order {
   phone: string;
   address: string;
   city: string;
+  county?: string;
   items: OrderItem[];
   subtotal: number;
   shipping: number;
