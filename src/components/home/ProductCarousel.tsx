@@ -66,6 +66,8 @@ export default function ProductCarousel({ title, products }: ProductCarouselProp
             swiperRef.current = swiper;
             // Re-bind nav after mount so refs are ready
             setTimeout(() => {
+              // The carousel may already be gone (navigation, hot reload): nothing to bind.
+              if (swiper.destroyed || !swiper.params) return;
               if (
                 swiper.params.navigation &&
                 typeof swiper.params.navigation !== "boolean"
