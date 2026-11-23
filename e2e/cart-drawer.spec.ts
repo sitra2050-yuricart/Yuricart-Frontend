@@ -1,9 +1,16 @@
 import { expect, test, type Page } from "@playwright/test";
 
-const openCart = (page: Page) =>
-  page.locator('button[aria-label^="Open cart"]:visible').first().click();
-
 const drawer = (page: Page) => page.getByRole("dialog");
+
+// Retries the click: right after a navigation the button can exist before the page has
+// finished loading, and an early click does nothing.
+const openCart = (page: Page) =>
+  expect(async () => {
+    if (!(await drawer(page).isVisible())) {
+      await page.locator('button[aria-label^="Open cart"]:visible').first().click();
+    }
+    await expect(drawer(page)).toBeVisible({ timeout: 1500 });
+  }).toPass({ timeout: 10_000 });
 const checkoutButton = (page: Page) =>
   drawer(page).getByRole("button", { name: "Checkout" });
 

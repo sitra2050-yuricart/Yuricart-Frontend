@@ -149,6 +149,7 @@ test.describe("order confirmation and tracking", () => {
     });
     await placeOrder(page, "Nairobi", "M-Pesa (after order)");
     await page.getByRole("button", { name: "Place order" }).click();
+    await page.getByRole("button", { name: "Continue as guest" }).click();
 
     await expect(page).toHaveURL(/checkout-success/);
     await expect(page.getByRole("heading", { name: "Next: pay with M-Pesa" })).toBeVisible();
@@ -162,6 +163,7 @@ test.describe("order confirmation and tracking", () => {
   test("tracking shows the order and its progress", async ({ page }) => {
     await placeOrder(page, "Nairobi");
     await page.getByRole("button", { name: "Place order" }).click();
+    await page.getByRole("button", { name: "Continue as guest" }).click();
     await expect(page).toHaveURL(/checkout-success/);
 
     await page.goto("/track");

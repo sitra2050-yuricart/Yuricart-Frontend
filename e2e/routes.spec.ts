@@ -86,10 +86,11 @@ test("unknown URLs get a helpful 404 with search and categories", async ({ page 
   await expect(page.getByRole("link", { name: "Laptops" }).first()).toBeVisible();
 });
 
-test("the login page keeps the standard header and footer", async ({ page }) => {
+test("the login page is a focused screen without the site header and footer", async ({ page }) => {
   await page.goto("/login");
-  await expect(page.getByRole("banner")).toBeVisible();
-  await expect(page.getByRole("contentinfo")).toBeVisible();
+  await expect(page.getByRole("banner")).toHaveCount(0);
+  await expect(page.getByRole("contentinfo")).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Back to store" })).toBeVisible();
 });
 
 test("offers lists only discounted products", async ({ page }) => {
