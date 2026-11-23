@@ -10,6 +10,7 @@ import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import AppChrome from "@/components/AppChrome";
 import MetaPixel from "@/components/MetaPixel";
 import Script from "next/script";
+import NextTopLoader from "nextjs-toploader";
 import { getSiteUrl } from "@/lib/seo";
 
 const sourceSans = Source_Sans_3({
@@ -114,6 +115,8 @@ export default function RootLayout({
           </noscript>
         ) : null}
         <MetaPixel />
+        {/* Thin progress bar for every page change. Orange shows on both the navy header and white pages. */}
+        <NextTopLoader color="#C2410C" height={3} showSpinner={false} shadow={false} speed={250} crawlSpeed={150} />
         <ThemeProvider
           attribute="class"
           forcedTheme="light"
