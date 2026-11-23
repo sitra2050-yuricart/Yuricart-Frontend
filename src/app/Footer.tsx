@@ -58,6 +58,7 @@ export default function Footer({ categories = [] }: FooterProps) {
               <FooterLink href="/shop">All products</FooterLink>
               <FooterLink href="/offers">Offers</FooterLink>
               <FooterLink href="/categories">All categories</FooterLink>
+              <FooterLink href="/brands">Brands</FooterLink>
             </ul>
           </nav>
 

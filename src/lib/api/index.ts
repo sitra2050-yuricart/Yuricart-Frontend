@@ -23,6 +23,9 @@ export {
   getBrands,
   getBrandBySlug,
   getAllBrands,
+  getNavBrands,
+  brandHasProducts,
+  getBrandLogoUrl,
 } from "./brands";
 
 export {

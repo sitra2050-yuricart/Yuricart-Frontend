@@ -58,7 +58,10 @@ export default async function Page() {
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center text-3xl font-bold text-primary/80">
+                      <div
+                        aria-hidden="true"
+                        className="flex h-full items-center justify-center text-3xl font-bold text-primary/80"
+                      >
                         {category.name.slice(0, 2).toUpperCase()}
                       </div>
                     )}

@@ -1,12 +1,13 @@
 import ListingView from "@/components/listing/ListingView";
 import {
   getAllCategories,
+  getNavBrands,
   hasProducts,
   getCategoryBySlug,
   getCategoryImageUrl,
   type ProductsSort,
 } from "@/lib/api";
-import { Category } from "@/lib/api/types";
+import { Brand, Category } from "@/lib/api/types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { orRedirectOnNotFound } from "@/lib/api/redirects";
@@ -25,6 +26,8 @@ interface PageProps {
     price_min?: string;
     price_max?: string;
     sort?: string;
+    brand?: string;
+    in_stock?: string;
   }>;
 }
 
@@ -69,7 +72,7 @@ export async function generateMetadata({
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  const { price_min, price_max, sort } = await searchParams;
+  const { price_min, price_max, sort, brand, in_stock } = await searchParams;
   const category = await orRedirectOnNotFound(
     `/collections/${slug}`,
     () => getCategoryBySlug(slug),
@@ -85,6 +88,8 @@ export default async function Page({ params, searchParams }: PageProps) {
   } catch {
     categories = [];
   }
+
+  const brands: Brand[] = await getNavBrands().catch(() => []);
 
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
@@ -105,8 +110,11 @@ export default async function Page({ params, searchParams }: PageProps) {
         ]}
         categories={categories}
         activeCategory={category.slug}
+        brands={brands}
         query={{
           category: category.slug,
+          brand: brand || undefined,
+          inStock: in_stock === "1" || undefined,
           minPrice: toPrice(price_min),
           maxPrice: toPrice(price_max),
           sort: SORTS.includes(sort as ProductsSort)

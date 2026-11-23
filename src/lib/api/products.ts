@@ -12,6 +12,7 @@ function toQueryParams(params: ProductQueryParams = {}) {
     featured: params.featured,
     newArrival: params.newArrival,
     bestSeller: params.bestSeller,
+    inStock: params.inStock,
     tags: params.tags,
     page: params.page,
     limit: params.limit,

@@ -7,6 +7,7 @@ const ROUTES = [
   { path: "/collections/laptops", name: "collection" },
   { path: "/products/hp-elitebook-830-g5", name: "product" },
   { path: "/offers", name: "offers" },
+  { path: "/brands", name: "brands" },
   { path: "/", name: "home (API down, fallback)" },
 ];
 
