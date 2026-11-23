@@ -412,7 +412,11 @@ export function CompareTable({ items }: { items: CompareItem[] }) {
   return (
     <SectionCard id="compare" title="Compare with similar items">
       <div className="overflow-x-auto">
-        <table className="min-w-full border-separate border-spacing-0 text-sm">
+        {/* table-fixed: every product column gets the same width, so rows line up */}
+        <table
+          className="w-full table-fixed border-separate border-spacing-0 text-sm"
+          style={{ minWidth: `${7 + items.length * 11}rem` }}
+        >
           <thead>
             <tr className="align-top">
               <th className="sticky left-0 z-10 w-28 bg-white md:w-44" />
@@ -420,20 +424,23 @@ export function CompareTable({ items }: { items: CompareItem[] }) {
                 <th
                   key={item.slug}
                   className={cn(
-                    "min-w-44 border-b border-gray-100 p-3 text-left font-normal",
+                    "border-b border-gray-100 p-3 text-left font-normal",
                     index === 0 && "bg-orange-50/70",
                   )}
                 >
-                  {index === 0 && (
-                    <span className="mb-2 inline-block rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
-                      This product
-                    </span>
-                  )}
+                  {/* Same-height slot in every column so the badge never shifts one column down */}
+                  <div className="mb-2 h-5">
+                    {index === 0 && (
+                      <span className="inline-block rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold uppercase leading-4 tracking-wide text-white">
+                        This product
+                      </span>
+                    )}
+                  </div>
                   <Link
                     href={`/products/${item.slug}`}
                     className="group flex flex-col gap-1.5"
                   >
-                    <div className="relative h-28 w-full rounded-lg bg-white">
+                    <div className="relative h-28 w-full rounded-lg bg-white ring-1 ring-gray-100">
                       <ProductImage
                         src={item.image}
                         alt={item.name}
@@ -442,7 +449,7 @@ export function CompareTable({ items }: { items: CompareItem[] }) {
                         className="object-contain p-1"
                       />
                     </div>
-                    <span className="line-clamp-2 min-h-10 font-medium leading-snug text-gray-800 group-hover:text-[#003B73]">
+                    <span className="line-clamp-2 h-10 font-medium leading-snug text-gray-800 group-hover:text-[#003B73]">
                       {item.name}
                     </span>
                     <strong className="text-base text-[#003B73]">
