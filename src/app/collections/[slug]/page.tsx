@@ -1,15 +1,13 @@
-import PaginationBar from "@/components/PaginationBar";
-import Product from "@/components/Products";
-import { Skeleton } from "@/components/ui/skeleton";
+import ListingView from "@/components/listing/ListingView";
 import {
+  getAllCategories,
   getCategoryBySlug,
   getCategoryImageUrl,
-  getProductsByCategorySlug,
-  toLegacyProductCards,
+  type ProductsSort,
 } from "@/lib/api";
+import { Category } from "@/lib/api/types";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 import {
   absoluteSeoTitle,
   buildBreadcrumbJsonLd,
@@ -21,7 +19,23 @@ import JsonLd from "@/components/JsonLd";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{
+    price_min?: string;
+    price_max?: string;
+    sort?: string;
+  }>;
+}
+
+const SORTS: ProductsSort[] = [
+  "createdAt_desc",
+  "price_asc",
+  "price_desc",
+  "title_asc",
+];
+
+function toPrice(value?: string): number | undefined {
+  const n = Number(value);
+  return value && Number.isFinite(n) && n >= 0 ? n : undefined;
 }
 
 export async function generateMetadata({
@@ -48,68 +62,46 @@ export async function generateMetadata({
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { slug } = await params;
-  const { page = "1" } = await searchParams;
+  const { price_min, price_max, sort } = await searchParams;
   const category = await getCategoryBySlug(slug);
 
   if (!category?._id) notFound();
+
+  let categories: Category[] = [];
+  try {
+    categories = await getAllCategories();
+  } catch {
+    categories = [];
+  }
 
   const breadcrumbJsonLd = buildBreadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: category.name, path: `/collections/${category.slug}` },
   ]);
-  const collectionJsonLd = buildCollectionPageJsonLd(category);
 
   return (
-    <div className="space-y-5">
-      <JsonLd data={collectionJsonLd} />
+    <main className="mx-auto max-w-[88rem] px-5 py-6 sm:py-8">
+      <JsonLd data={buildCollectionPageJsonLd(category)} />
       <JsonLd data={breadcrumbJsonLd} />
-      <h2 className="text-2xl font-bold">Products</h2>
-      <Suspense fallback={<LoadingSkeleton />} key={page}>
-        <CategoryProducts categorySlug={slug} page={parseInt(page)} />
-      </Suspense>
-    </div>
-  );
-}
-
-interface CategoryProductsProps {
-  categorySlug: string;
-  page: number;
-}
-
-async function CategoryProducts({ categorySlug, page }: CategoryProductsProps) {
-  const pageSize = 8;
-
-  const collectionProducts = await getProductsByCategorySlug(categorySlug, {
-    limit: pageSize,
-    page,
-  });
-
-  if (!collectionProducts.items.length && page === 1) notFound();
-  if (page > collectionProducts.meta.totalPages) notFound();
-
-  const legacyProducts = toLegacyProductCards(collectionProducts.items);
-
-  return (
-    <div className="space-y-10">
-      <div className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
-        {legacyProducts.map((product) => (
-          <Product key={product._id} product={product} />
-        ))}
-      </div>
-      <PaginationBar
-        currentPage={page}
-        totalPages={collectionProducts.meta.totalPages}
+      <ListingView
+        title={category.name}
+        description={category.description}
+        crumbs={[
+          { label: "Home", href: "/" },
+          { label: "Categories", href: "/categories" },
+          { label: category.name },
+        ]}
+        categories={categories}
+        activeCategory={category.slug}
+        query={{
+          category: category.slug,
+          minPrice: toPrice(price_min),
+          maxPrice: toPrice(price_max),
+          sort: SORTS.includes(sort as ProductsSort)
+            ? (sort as ProductsSort)
+            : undefined,
+        }}
       />
-    </div>
-  );
-}
-
-function LoadingSkeleton() {
-  return (
-    <div className="flex grid-cols-2 flex-col gap-5 sm:grid md:grid-cols-3 lg:grid-cols-4">
-      {Array.from({ length: 8 }).map((_, i) => (
-        <Skeleton key={i} className="h-[26rem] w-full" />
-      ))}
-    </div>
+    </main>
   );
 }
