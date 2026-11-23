@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useToast } from "./use-toast";
 import { Product } from "@/lib/api/types";
 import { useCartStore } from "@/lib/cart/cart-store";
-import { getProductEffectivePrice } from "@/lib/api/product-utils";
+import { getProductEffectivePrice, getUnitPrice } from "@/lib/api/product-utils";
 import {
   trackAddToCart,
   trackInitiateCheckout,
@@ -32,7 +32,7 @@ export function useCartCheckout() {
       contents: items.map((item) => ({
         id: item.productId,
         quantity: item.quantity,
-        item_price: item.salePrice ?? item.price,
+        item_price: getUnitPrice(item),
       })),
       value: subtotal,
       currency: items[0]?.currency || "KES",

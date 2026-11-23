@@ -4,6 +4,7 @@ import {
   getProductEffectivePrice,
   getProductImageUrl,
   hasProductDiscount,
+  PRICE_ON_REQUEST,
 } from "@/lib/api/product-utils";
 
 /**
@@ -126,11 +127,12 @@ export function hasHtml(value?: string): boolean {
 
 export function toRailItem(product: Product): RailItem {
   const discounted = hasProductDiscount(product);
+  const effective = getProductEffectivePrice(product);
   return {
     slug: product.slug,
     name: product.title,
     image: getProductImageUrl(product),
-    price: formatKes(getProductEffectivePrice(product)),
+    price: effective > 0 ? formatKes(effective) : PRICE_ON_REQUEST,
     originalPrice: discounted ? formatKes(product.price) : undefined,
   };
 }

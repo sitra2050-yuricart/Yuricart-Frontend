@@ -155,18 +155,23 @@ export function buildProductJsonLd(product: Product) {
       name: brandName || siteConfig.name,
     },
     category: categoryName || undefined,
-    offers: {
-      "@type": "Offer",
-      url: absoluteUrl(`/products/${product.slug}`),
-      priceCurrency: product.currency || "KES",
-      price,
-      availability,
-      itemCondition: "https://schema.org/NewCondition",
-      seller: {
-        "@type": "Organization",
-        name: siteConfig.name,
-      },
-    },
+    // No Offer when there is no real price: a price of 0 would tell Google the
+    // product is free.
+    offers:
+      price > 0
+        ? {
+            "@type": "Offer",
+            url: absoluteUrl(`/products/${product.slug}`),
+            priceCurrency: product.currency || "KES",
+            price,
+            availability,
+            itemCondition: "https://schema.org/NewCondition",
+            seller: {
+              "@type": "Organization",
+              name: siteConfig.name,
+            },
+          }
+        : undefined,
   };
 }
 

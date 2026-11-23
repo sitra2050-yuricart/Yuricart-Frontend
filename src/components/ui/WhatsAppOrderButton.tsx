@@ -13,6 +13,8 @@ interface WhatsAppOrderButtonProps {
   className?: string;
   /** Optional delivery location typed on the product page; added to the message. */
   deliveryLocation?: string;
+  /** Ask for the price instead of placing an order (products without a price). */
+  enquiry?: boolean;
 }
 
 export default function WhatsAppOrderButton({
@@ -24,11 +26,17 @@ export default function WhatsAppOrderButton({
   label = "Order via WhatsApp",
   className,
   deliveryLocation,
+  enquiry = false,
 }: WhatsAppOrderButtonProps) {
   const totalPrice = salePrice * quantity;
   const location = deliveryLocation?.trim();
 
-  const message = `Hi, I want to order this product:\n\n*${productName}*\nQuantity: ${quantity}\nSale Price: ${totalPrice}${
+  const message = enquiry
+    ? `Hi, what is the price of this product?
+
+*${productName}*
+${productUrl}`
+    : `Hi, I want to order this product:\n\n*${productName}*\nQuantity: ${quantity}\nSale Price: ${totalPrice}${
     location ? `\nDelivery location: ${location}` : ""
   }\n${productUrl}`;
 
@@ -44,8 +52,7 @@ export default function WhatsAppOrderButton({
       onClick={() =>
         trackLead({
           content_name: productName ?? undefined,
-          value: totalPrice,
-          currency: "KES",
+          ...(enquiry ? {} : { value: totalPrice, currency: "KES" }),
         })
       }
       className={cn(
