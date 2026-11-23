@@ -52,6 +52,8 @@ export default function CheckoutPage() {
 
   // Ask the API what delivery costs once there is a city; same rules the order uses.
   const city = form.city.trim();
+  // No zone and no fee means no delivery rules are configured, not free delivery.
+  const feeKnown = quote !== null && (quote.zone !== null || quote.shipping > 0);
   useEffect(() => {
     if (!city) {
       setQuote(null);
@@ -190,28 +192,32 @@ export default function CheckoutPage() {
           <div className="flex justify-between gap-4" aria-live="polite">
             <dt>Delivery:</dt>
             <dd className="font-semibold">
-              {quote
+              {feeKnown && quote
                 ? quote.shipping === 0
                   ? "Free"
                   : formatCurrency(quote.shipping)
                 : quoteState === "loading"
                   ? "Checking…"
-                  : quoteState === "error"
+                  : quote || quoteState === "error"
                     ? "Confirmed when we contact you"
                     : "Enter your city below"}
             </dd>
           </div>
-          {quote && quote.freeAbove && quote.shipping > 0 && subtotal < quote.freeAbove ? (
+          {feeKnown && quote && quote.freeAbove && quote.shipping > 0 && subtotal < quote.freeAbove ? (
             <p className="text-xs text-gray-600">
               Free delivery on orders over {formatCurrency(quote.freeAbove)}.
             </p>
           ) : null}
           <div className="flex justify-between gap-4 border-t border-gray-100 pt-2 text-base font-bold">
             <dt>Total:</dt>
-            <dd>{quote ? formatCurrency(subtotal + quote.shipping) : formatCurrency(subtotal)}</dd>
+            <dd>{feeKnown && quote ? formatCurrency(subtotal + quote.shipping) : formatCurrency(subtotal)}</dd>
           </div>
-          {!quote ? (
-            <p className="text-xs text-gray-600">Delivery is added to the total once we know your city.</p>
+          {!feeKnown ? (
+            <p className="text-xs text-gray-600">
+              {quote || quoteState === "error"
+                ? "Delivery is not included yet. We confirm the fee with you before dispatch."
+                : "Delivery is added to the total once we know your city."}
+            </p>
           ) : null}
         </dl>
       </section>

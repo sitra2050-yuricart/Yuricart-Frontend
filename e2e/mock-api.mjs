@@ -55,6 +55,8 @@ for (const category of cats) {
 
 // Delivery: 200 inside Nairobi, 800 elsewhere, free from 100,000.
 const quote = (subtotal, region) => {
+  // "Norules" stands for the live shop, which has no delivery rules set up yet.
+  if (/norules/i.test(region || "")) return { shipping: 0, freeAbove: null, zone: null };
   const rate = /nairobi/i.test(region || "") ? 200 : 800;
   return {
     shipping: subtotal >= 100000 ? 0 : rate,

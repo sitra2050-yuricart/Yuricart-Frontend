@@ -127,6 +127,20 @@ test.describe("checkout totals", () => {
   });
 });
 
+test.describe("checkout when no delivery rules exist", () => {
+  test("it does not claim delivery is free and keeps the subtotal as the total", async ({ page }) => {
+    await page.goto("/products/hp-elitebook-830-g5");
+    await page.locator("button:visible", { hasText: "Add to cart" }).first().click();
+    await page.goto("/checkout");
+    await page.getByLabel("City").fill("Norules");
+
+    await expect(page.getByText(/Delivery:/).locator("xpath=..")).toContainText("Confirmed when we contact you");
+    await expect(page.getByText(/Delivery:/).locator("xpath=..")).not.toContainText("Free");
+    await expect(page.getByText(/Total:/).locator("xpath=..")).toContainText("28,000");
+    await expect(page.getByText(/We confirm the fee with you before dispatch/)).toBeVisible();
+  });
+});
+
 test.describe("order confirmation and tracking", () => {
   test("an M-Pesa order says what happens next and never calls an STK API", async ({ page }) => {
     const stk: string[] = [];
