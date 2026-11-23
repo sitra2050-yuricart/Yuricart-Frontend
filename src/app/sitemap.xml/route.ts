@@ -34,6 +34,7 @@ export async function GET() {
   const entries: SitemapEntry[] = [
     { url: absoluteUrl("/"), lastModified: now, changeFrequency: "daily", priority: 1 },
     { url: absoluteUrl("/shop"), lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: absoluteUrl("/offers"), lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: absoluteUrl("/categories"), lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: absoluteUrl("/terms"), lastModified: now, changeFrequency: "yearly", priority: 0.3 },
   ];

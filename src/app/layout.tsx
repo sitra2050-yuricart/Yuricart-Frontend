@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Libre_Baskerville, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
-import Footer from "./Footer";
+import FooterWithData from "./FooterWithData";
 import ReactQueryProvider from "./ReactQueryProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "next-themes";
@@ -132,7 +132,7 @@ export default function RootLayout({
           <ReactQueryProvider>
             <AppChrome
               navbar={<Navbar />}
-              footer={<Footer />}
+              footer={<FooterWithData />}
               whatsapp={<WhatsAppButton />}
             >
               {children}

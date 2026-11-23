@@ -5,8 +5,8 @@ const PORT = Number(process.env.E2E_PORT ?? 3100);
 /**
  * End-to-end checks run against a production build served on PORT. Storefront
  * data comes from a mock API (e2e/mock-api.mjs) so the tests need no backend.
- * Build first with the same env (NEXT_PUBLIC_* values are baked in at build):
- *   NEXT_PUBLIC_API_URL=http://localhost:8100 NEXT_PUBLIC_BASE_URL=https://www.yuricart.com npm run build
+ * Build first with `npm run e2e:build`: it runs the mock API during the build so
+ * pages that fetch at build time prerender with the data the tests expect.
  */
 export default defineConfig({
   testDir: "./e2e",

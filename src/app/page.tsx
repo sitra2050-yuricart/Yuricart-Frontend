@@ -1,3 +1,4 @@
+import HomeFallback from "@/components/home/HomeFallback";
 import HeroSlider from "@/components/home/HeroSlider";
 import PromoCards from "@/components/home/PromoCards";
 import CategoryCircles from "@/components/home/CategoryCircles";
@@ -37,15 +38,7 @@ export default async function Home() {
     data = null;
   }
 
-  if (!data) {
-    return (
-      <main className="mx-auto max-w-7xl px-4 py-16 text-center">
-        <p className="text-muted-foreground">
-          Unable to load homepage. Please try again later.
-        </p>
-      </main>
-    );
-  }
+  if (!data) return <HomeFallback />;
 
   const featuredById = Object.fromEntries(
     data.featuredSections.map((s) => [s.id, s]),

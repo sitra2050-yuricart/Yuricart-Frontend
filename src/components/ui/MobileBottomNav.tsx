@@ -69,13 +69,22 @@ export default function MobileBottomNav() {
           <button
             type="button"
             onClick={openDrawer}
-            aria-label={`Open cart, ${totalQuantity} items`}
+            aria-label={
+              totalQuantity > 0
+                ? `Open cart, ${totalQuantity} ${totalQuantity === 1 ? "item" : "items"}`
+                : "Open cart, empty"
+            }
             className="relative flex flex-col items-center text-xs text-gray-600"
           >
             <ShoppingCart className="h-5 w-5" aria-hidden="true" />
-            <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
-              {totalQuantity}
-            </span>
+            {totalQuantity > 0 && (
+              <span
+                aria-hidden="true"
+                className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-white"
+              >
+                {totalQuantity}
+              </span>
+            )}
             <span>Cart</span>
           </button>
         </li>
