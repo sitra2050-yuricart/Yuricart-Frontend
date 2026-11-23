@@ -197,6 +197,19 @@ http
       globalThis.__lookupCalls = (globalThis.__lookupCalls || 0) + 1;
       return res.end(JSON.stringify(ok({ message: "If we have orders for that email, we have sent the order numbers to it." })));
     }
+    if (req.method === "GET" && p === "/products/suggest") {
+      const q = (url.searchParams.get("q") || "").trim().toLowerCase();
+      if (q === "boom") {
+        res.statusCode = 400;
+        return res.end(JSON.stringify({ success: false, message: "bad" }));
+      }
+      const words = q.split(/\s+/).filter(Boolean);
+      const found = products
+        .filter((x) => words.every((w) => x.title.toLowerCase().split(/[^a-z0-9]+/).some((t) => t.startsWith(w))))
+        .slice(0, 6)
+        .map(({ _id, title, slug, price, salePrice, stock, images, currency }) => ({ _id, title, slug, price, salePrice, stock, images, currency }));
+      return res.end(JSON.stringify(ok(found)));
+    }
     if (req.method === "GET" && p.startsWith("/orders/track/")) {
       const order = globalThis.__lastOrder?.order;
       if (order && p.endsWith(order.orderNumber)) return res.end(JSON.stringify(ok(order)));

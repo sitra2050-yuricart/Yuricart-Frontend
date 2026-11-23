@@ -33,11 +33,19 @@ export default function ListingView({
       <Breadcrumb items={crumbs} />
 
       <header className="rounded-2xl bg-white px-5 py-5 ring-1 ring-gray-900/5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_-18px_rgba(16,24,40,0.16)] sm:px-7">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <span className="h-6 w-1 rounded-full bg-cta" aria-hidden />
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+          <h1 className="min-w-0 break-words text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
             {title}
           </h1>
+          {query.q ? (
+            <Link
+              href="/shop"
+              className="ml-auto inline-flex h-9 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/15 transition hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              Clear search
+            </Link>
+          ) : null}
         </div>
         {description ? (
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600">
