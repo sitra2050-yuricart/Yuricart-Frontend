@@ -1,33 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Home,
-  ShoppingBag,
-  ShoppingCart,
-  User,
-  LogOutIcon,
-  LogInIcon,
-  UserPlus,
-} from "lucide-react";
+import { Home, ShoppingBag, ShoppingCart } from "lucide-react";
 import { useCartDrawer } from "@/components/ui/CartDrawerContext";
 import { useCartStore } from "@/lib/cart/cart-store";
 import { useCartHydrated } from "@/hooks/useCartHydrated";
-import useAuth from "@/hooks/auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu";
+import AccountMenu from "@/components/AccountMenu";
 
 export default function MobileBottomNav() {
   const { openDrawer } = useCartDrawer();
   const hydrated = useCartHydrated();
   const items = useCartStore((s) => s.items);
-  const { user, logout, openLogin } = useAuth();
 
   const totalQuantity = hydrated
     ? items.reduce((sum, item) => sum + (item.quantity || 0), 0)
@@ -81,47 +64,7 @@ export default function MobileBottomNav() {
         </li>
 
         <li>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="flex flex-col items-center text-xs text-gray-700 rounded-lg px-3 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                <User className="h-5 w-5" />
-                <span>Account</span>
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="min-w-44 max-w-64">
-              {user && (
-                <>
-                  <DropdownMenuLabel>{user.name || user.email}</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <Link href="/profile">
-                    <DropdownMenuItem>User Profile</DropdownMenuItem>
-                  </Link>
-                  <DropdownMenuSeparator />
-                </>
-              )}
-
-              <DropdownMenuSeparator />
-              {user ? (
-                <DropdownMenuItem onClick={() => logout()}>
-                  <LogOutIcon className="mr-2 size-4" />
-                  Logout
-                </DropdownMenuItem>
-              ) : (
-                <>
-                  <DropdownMenuItem onClick={() => openLogin()}>
-                    <LogInIcon className="mr-2 size-4" />
-                    Log in
-                  </DropdownMenuItem>
-                  <Link href="/register">
-                    <DropdownMenuItem>
-                      <UserPlus className="mr-2 size-4" />
-                      Create account
-                    </DropdownMenuItem>
-                  </Link>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AccountMenu variant="bottom" />
         </li>
       </ul>
     </nav>

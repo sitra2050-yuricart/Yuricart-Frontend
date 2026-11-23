@@ -11,6 +11,9 @@ type AppChromeProps = {
   whatsapp: React.ReactNode;
 };
 
+/** Sign-in pages are focused screens: no header, footer or chat button. */
+const AUTH_ROUTES = ["/login", "/register", "/forgot-password", "/reset-password", "/verify-email"];
+
 export default function AppChrome({
   children,
   navbar,
@@ -19,11 +22,20 @@ export default function AppChrome({
 }: AppChromeProps) {
   const pathname = usePathname();
   const isAdminRoute = pathname.startsWith("/admin");
+  const isAuthRoute = AUTH_ROUTES.some((route) => pathname === route);
 
-  // Only the admin area has its own chrome. Login, checkout and the 404 page keep
-  // the standard header and footer so shoppers can always get back to the store.
+  // The admin area has its own chrome. Checkout and the 404 page keep the standard
+  // header and footer so shoppers can always get back to the store.
   if (isAdminRoute) {
     return <>{children}</>;
+  }
+
+  if (isAuthRoute) {
+    return (
+      <WhatsAppSettingsProvider>
+        <CartDrawerProvider>{children}</CartDrawerProvider>
+      </WhatsAppSettingsProvider>
+    );
   }
 
   return (

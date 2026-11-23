@@ -6,7 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import UserButton from "@/components/UserButton";
+import useAuth from "@/hooks/auth";
 import { twConfig } from "@/lib/utils";
 import { Category } from "@/lib/api/types";
 import Link from "next/link";
@@ -86,10 +86,38 @@ export default function MobileMenu({ collections }: MobileMenuProps) {
                 </li>
               ))}
             </ul>
-            <UserButton />
+            <MenuAccountLinks />
           </div>
         </SheetContent>
       </Sheet>
     </>
+  );
+}
+
+function MenuAccountLinks() {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+
+  const link =
+    "flex h-11 items-center justify-center rounded-full text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+
+  return user ? (
+    <div className="mt-6 grid grid-cols-2 gap-2 border-t border-gray-100 pt-4">
+      <Link href="/profile#orders" className={`${link} bg-primary text-white`}>
+        My orders
+      </Link>
+      <Link href="/profile" className={`${link} bg-white text-gray-800 ring-1 ring-gray-900/15`}>
+        Profile
+      </Link>
+    </div>
+  ) : (
+    <div className="mt-6 grid grid-cols-2 gap-2 border-t border-gray-100 pt-4">
+      <Link href="/login" className={`${link} bg-primary text-white`}>
+        Log in
+      </Link>
+      <Link href="/register" className={`${link} bg-white text-gray-800 ring-1 ring-gray-900/15`}>
+        Sign up
+      </Link>
+    </div>
   );
 }

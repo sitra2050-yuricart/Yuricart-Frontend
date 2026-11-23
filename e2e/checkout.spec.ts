@@ -27,6 +27,7 @@ test.describe("order flow (guest, cash on delivery)", () => {
     await page.getByLabel("Delivery address").fill("Moi Avenue, Bazaar Plaza");
     await page.getByLabel("City").fill("Nairobi");
     await page.getByRole("button", { name: "Place order" }).click();
+    await page.getByRole("button", { name: "Continue as guest" }).click();
 
     await expect(page).toHaveURL(/\/checkout-success\?orderNumber=YC-TEST-0001/);
     await expect(page.getByRole("heading", { name: "We received your order!" })).toBeVisible();
@@ -56,6 +57,7 @@ test.describe("order flow (guest, cash on delivery)", () => {
     await page.getByLabel("Delivery address").fill("Moi Avenue");
     await page.getByLabel("City").fill("Nairobi");
     await page.getByRole("button", { name: "Place order" }).click();
+    await page.getByRole("button", { name: "Continue as guest" }).click();
     await expect(page).toHaveURL(/checkout-success/);
 
     await page.goto("/checkout");
@@ -78,6 +80,7 @@ test.describe("order flow (guest, cash on delivery)", () => {
       await dialog.dismiss();
     });
     await page.getByRole("button", { name: "Place order" }).click();
+    await page.getByRole("button", { name: "Continue as guest" }).click();
     await expect(page.locator("form").getByRole("alert")).toContainText("out of stock");
     expect(dialogs).toBe(0);
 
@@ -104,5 +107,37 @@ test.describe("order flow (guest, cash on delivery)", () => {
     await page.goto("/checkout");
     await expect(page.getByText("Your cart is empty.")).toBeVisible();
     await expect(page.getByRole("link", { name: "Continue shopping" })).toHaveAttribute("href", "/shop");
+  });
+
+  test("a shopper who is not logged in is offered login, sign-up or guest before the order is sent", async ({ page }) => {
+    await addToCart(page);
+    await page.goto("/checkout");
+    await page.getByLabel("Full name").fill("Amina Wanjiru");
+    await page.getByLabel("Email").fill("amina@example.com");
+    await page.getByLabel("Phone (WhatsApp)").fill("0712345678");
+    await page.getByLabel("Delivery address").fill("Moi Avenue");
+    await page.getByLabel("City").fill("Nairobi");
+    let orderRequests = 0;
+    page.on("request", (r) => {
+      if (r.method() === "POST" && r.url().endsWith("/orders")) orderRequests += 1;
+    });
+
+    await page.getByRole("button", { name: "Place order" }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByRole("heading", { name: "How would you like to order?" })).toBeVisible();
+    await expect(dialog.getByRole("link", { name: "Log in" })).toHaveAttribute("href", "/login?next=/checkout");
+    await expect(dialog.getByRole("link", { name: "Create an account" })).toHaveAttribute("href", "/register?next=/checkout");
+    expect(orderRequests).toBe(0);
+
+    // closing it keeps the form and sends nothing
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeHidden();
+    await expect(page.getByLabel("City")).toHaveValue("Nairobi");
+    expect(orderRequests).toBe(0);
+
+    await page.getByRole("button", { name: "Place order" }).click();
+    await page.getByRole("button", { name: "Continue as guest" }).click();
+    await expect(page).toHaveURL(/checkout-success/);
+    expect(orderRequests).toBe(1);
   });
 });

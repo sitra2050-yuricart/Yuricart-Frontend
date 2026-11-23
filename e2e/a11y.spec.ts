@@ -63,6 +63,10 @@ test.describe("keyboard and assistive technology", () => {
     await page.keyboard.press("Tab");
     await expect(page.getByRole("button", { name: "Place order" })).toBeFocused();
     await page.keyboard.press("Enter");
+    // a not-logged-in shopper chooses how to continue; the choices are keyboard-reachable
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.getByRole("button", { name: "Continue as guest" }).focus();
+    await page.keyboard.press("Enter");
 
     await expect(page).toHaveURL(/checkout-success/);
   });
