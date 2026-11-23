@@ -247,7 +247,7 @@ export function RailCard({ item }: { item: RailItem }) {
             {item.price}
           </strong>
           {item.originalPrice && (
-            <span className="text-xs text-gray-400 line-through">
+            <span className="text-xs text-gray-500 line-through">
               {item.originalPrice}
             </span>
           )}
