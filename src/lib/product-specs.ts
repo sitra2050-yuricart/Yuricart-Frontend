@@ -66,6 +66,13 @@ export function htmlToLines(html?: string): string[] {
     .filter(Boolean);
 }
 
+/**
+ * Lines that look like "Label: value" but are shop/contact/marketing text, not
+ * product specs (e.g. "Location: Bazaar Plaza, 1st Floor, Shop A02").
+ */
+const NON_SPEC_LABEL =
+  /^(location|address|shop|store|visit|find us|contact|phone|tel|call|whatsapp|email|delivery|shipping|payment|price|offer|note|notes|free|gift|bonus|hours|opening)\b/i;
+
 export function parseSpecs(html?: string): SpecRow[] {
   const rows: SpecRow[] = [];
   const seen = new Set<string>();
@@ -76,6 +83,7 @@ export function parseSpecs(html?: string): SpecRow[] {
     const label = match[1].trim();
     const value = match[2].trim();
     if (!value || /https?:|\/\//i.test(label) || /^\/\//.test(value)) continue;
+    if (NON_SPEC_LABEL.test(label)) continue;
     if (label.split(/\s+/).length > 5) continue;
     const key = label.toLowerCase();
     if (seen.has(key)) continue;
