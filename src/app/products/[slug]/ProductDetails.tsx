@@ -430,7 +430,8 @@ export default function ProductDetails({
                 salePrice={getProductEffectivePrice(apiProduct)}
                 deliveryLocation={location}
                 label="Buy on WhatsApp"
-                className="hidden h-12 w-full rounded-xl bg-whatsapp text-[15px] font-semibold shadow-sm hover:bg-whatsapp/90 md:flex"
+                iconOnlyOnMobile
+                className="h-12 w-12 shrink-0 gap-0 rounded-xl bg-whatsapp px-0 text-[15px] font-semibold shadow-sm hover:bg-whatsapp/90 md:w-full md:gap-2 md:px-4"
               />
             </div>
           )}
