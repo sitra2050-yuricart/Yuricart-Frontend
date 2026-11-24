@@ -1,9 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import Breadcrumb from "@/components/listing/Breadcrumb";
-import { getBrandLogoUrl, getNavBrands } from "@/lib/api";
+import { getNavBrands } from "@/lib/api";
 import type { Brand } from "@/lib/api/types";
-import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
+import { formatBrandName } from "@/lib/brand-name";
 import { buildPageMetadata } from "@/lib/seo";
 import type { Metadata } from "next";
 
@@ -41,7 +40,7 @@ export default async function Page() {
       {brands.length ? (
         <ul className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {brands.map((brand) => {
-            const logo = getBrandLogoUrl(brand);
+            const name = formatBrandName(brand.name);
             return (
               <li key={brand._id}>
                 <Link
@@ -49,25 +48,15 @@ export default async function Page() {
                   className="group flex h-full flex-col items-center gap-3 rounded-2xl bg-white px-4 py-6 text-center ring-1 ring-gray-900/5 shadow-[0_1px_2px_rgba(16,24,40,0.04),0_8px_24px_-14px_rgba(16,24,40,0.18)] transition duration-300 hover:-translate-y-0.5 hover:ring-primary/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   <div className="relative flex h-16 w-full items-center justify-center">
-                    {logo ? (
-                      <Image
-                        src={optimizeCloudinaryUrl(logo, { width: 240 })}
-                        alt=""
-                        fill
-                        sizes="160px"
-                        className="object-contain"
-                      />
-                    ) : (
-                      <span
-                        aria-hidden="true"
-                        className="flex size-14 items-center justify-center rounded-full bg-brand-soft text-xl font-bold text-primary"
-                      >
-                        {brand.name.slice(0, 2).toUpperCase()}
-                      </span>
-                    )}
+                    <span
+                      aria-hidden="true"
+                      className="flex size-14 items-center justify-center rounded-full bg-brand-soft text-xl font-bold text-primary"
+                    >
+                      {name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase()}
+                    </span>
                   </div>
                   <span className="text-sm font-semibold text-gray-900 transition-colors group-hover:text-primary">
-                    {brand.name}
+                    {name}
                   </span>
                   {typeof brand.productCount === "number" ? (
                     <span className="-mt-2 text-xs text-gray-600">

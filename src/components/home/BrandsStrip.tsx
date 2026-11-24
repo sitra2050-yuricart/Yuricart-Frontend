@@ -1,10 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
-import { getBrandLogoUrl } from "@/lib/api";
 import type { Brand } from "@/lib/api/types";
-import { optimizeCloudinaryUrl } from "@/lib/cloudinary";
+import { formatBrandName } from "@/lib/brand-name";
 
-/** Brand logos (or names) linking to the filtered shop. Renders nothing without brands. */
+/**
+ * Brand names linking to the filtered shop. Names only, formatted the same way: the
+ * images saved on brands are product photos rather than logos, so showing them made one
+ * tile look different from the rest. Renders nothing without brands.
+ */
 export default function BrandsStrip({ brands }: { brands: Brand[] }) {
   if (!brands.length) return null;
 
@@ -23,24 +25,13 @@ export default function BrandsStrip({ brands }: { brands: Brand[] }) {
       </div>
       <ul className="flex flex-wrap gap-2">
         {brands.slice(0, 12).map((brand) => {
-          const logo = getBrandLogoUrl(brand);
           return (
             <li key={brand._id}>
               <Link
                 href={`/shop?brand=${encodeURIComponent(brand.slug)}`}
                 className="flex h-12 min-w-24 items-center justify-center rounded-xl bg-white px-4 text-sm font-semibold text-gray-800 ring-1 ring-gray-900/10 transition hover:text-primary hover:ring-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
-                {logo ? (
-                  <Image
-                    src={optimizeCloudinaryUrl(logo, { width: 200 })}
-                    alt={brand.name}
-                    width={80}
-                    height={32}
-                    className="h-8 w-auto object-contain"
-                  />
-                ) : (
-                  brand.name
-                )}
+                {formatBrandName(brand.name)}
               </Link>
             </li>
           );

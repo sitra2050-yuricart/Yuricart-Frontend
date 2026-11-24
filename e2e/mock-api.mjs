@@ -35,9 +35,10 @@ const products = Array.from({ length: 24 }, (_, i) =>
 );
 
 const brands = [
-  { _id: "b1", name: "HP", slug: "hp" },
-  { _id: "b2", name: "Dell", slug: "dell" },
-  { _id: "b3", name: "Lenovo", slug: "lenovo" },
+  // typed by hand, so messy on purpose: the storefront has to show them consistently
+  { _id: "b1", name: "hp", slug: "hp", image: { url: "https://res.cloudinary.com/demo/image/upload/product-photo.jpg" } },
+  { _id: "b2", name: "DELL", slug: "dell" },
+  { _id: "b3", name: "LENOVO", slug: "lenovo" },
   { _id: "b4", name: "Epson", slug: "epson" }, // no products: must be hidden
 ];
 // Spread products over brands and sell a few out (product 0 stays in stock).

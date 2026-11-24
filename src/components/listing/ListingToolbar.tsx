@@ -1,4 +1,5 @@
 "use client";
+import { formatBrandName } from "@/lib/brand-name";
 
 import { useEffect, useOptimistic, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -141,7 +142,7 @@ function BrandSelect({
         <option value="">All brands</option>
         {brands.map((brand) => (
           <option key={brand._id} value={brand.slug}>
-            {brand.name}
+            {formatBrandName(brand.name)}
           </option>
         ))}
       </select>
@@ -235,7 +236,7 @@ export default function ListingToolbar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const brandName = brands.find((b) => b.slug === filters.brand)?.name ?? filters.brand;
+  const brandName = formatBrandName(brands.find((b) => b.slug === filters.brand)?.name ?? filters.brand);
   const chips: Array<{ label: string; remove: Updates }> = [];
   if (filters.brand) chips.push({ label: brandName, remove: { brand: undefined } });
   if (filters.inStock) chips.push({ label: "In stock", remove: { in_stock: undefined } });
