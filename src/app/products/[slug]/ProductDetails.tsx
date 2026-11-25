@@ -415,13 +415,6 @@ export default function ProductDetails({
                 quantity={quantity}
                 className={cn(BUY_BUTTON, "bg-primary hover:bg-primary/90")}
               />
-              <BuyNowButton
-                product={apiProduct}
-                selectedOptions={selectedOptions}
-                quantity={quantity}
-                variant="default"
-                className={cn(BUY_BUTTON, "bg-cta hover:bg-cta/90")}
-              />
               <WhatsAppOrderButton
                 phoneNumber={whatsappNumber}
                 productName={product.name ?? "Unnamed Product"}
@@ -432,6 +425,13 @@ export default function ProductDetails({
                 label="Buy on WhatsApp"
                 iconOnlyOnMobile
                 className="h-12 w-12 shrink-0 gap-0 rounded-xl bg-whatsapp px-0 text-[15px] font-semibold shadow-sm hover:bg-whatsapp/90 md:w-full md:gap-2 md:px-4"
+              />
+              <BuyNowButton
+                product={apiProduct}
+                selectedOptions={selectedOptions}
+                quantity={quantity}
+                variant="default"
+                className={cn(BUY_BUTTON, "bg-cta hover:bg-cta/90")}
               />
             </div>
           )}
