@@ -9,6 +9,8 @@ interface BuyNowButtonProps extends ButtonProps {
   product: Product;
   quantity: number;
   selectedOptions: Record<string, string>;
+  /** Phones: show only the icon (label stays for screen readers and larger screens). */
+  iconOnlyOnMobile?: boolean;
 }
 
 export default function BuyNowButton({
@@ -16,6 +18,7 @@ export default function BuyNowButton({
   quantity,
   selectedOptions,
   className,
+  iconOnlyOnMobile = false,
   ...props
 }: BuyNowButtonProps) {
   const { startCheckoutFlow, pending } = useQuickBuy();
@@ -28,8 +31,10 @@ export default function BuyNowButton({
       className={cn("flex gap-3", className)}
       {...props}
     >
-      <CreditCardIcon />
-      Buy now
+      <CreditCardIcon className="shrink-0" />
+      <span className={cn(iconOnlyOnMobile && "sr-only md:not-sr-only")}>
+        Buy now
+      </span>
     </LoadingButton>
   );
 }
