@@ -6,7 +6,7 @@ test.describe("WhatsApp order button on the product page", () => {
   test("is visible, tappable and opens a prefilled order message", async ({ page }) => {
     await page.goto(PATH);
 
-    const button = page.getByRole("link", { name: "Buy on WhatsApp" });
+    const button = page.getByRole("link", { name: "Buy via WhatsApp" });
     await expect(button).toBeVisible();
 
     const href = (await button.getAttribute("href")) ?? "";
@@ -31,8 +31,8 @@ test.describe("WhatsApp order button on the product page", () => {
       await page.goto(PATH);
 
       const boxes = await Promise.all(
-        ["Add to cart", "Buy on WhatsApp", "Buy now"].map(async (name) => {
-          const el = page.getByRole(name === "Buy on WhatsApp" ? "link" : "button", { name: new RegExp(name, "i") }).first();
+        ["Add to cart", "Buy via WhatsApp", "Buy now"].map(async (name) => {
+          const el = page.getByRole(name === "Buy via WhatsApp" ? "link" : "button", { name: new RegExp(name, "i") }).first();
           await expect(el).toBeVisible();
           return (await el.boundingBox())!;
         }),
@@ -55,7 +55,7 @@ test.describe("WhatsApp order button on the product page", () => {
     const ys = await Promise.all(
       [
         page.getByRole("button", { name: /Add to cart/i }).first(),
-        page.getByRole("link", { name: "Buy on WhatsApp" }),
+        page.getByRole("link", { name: "Buy via WhatsApp" }),
         page.getByRole("button", { name: /Buy now/i }).first(),
       ].map(async (el) => (await el.boundingBox())!.y),
     );
@@ -66,8 +66,8 @@ test.describe("WhatsApp order button on the product page", () => {
   test("on larger screens it keeps its full label", async ({ page, isMobile }) => {
     test.skip(isMobile, "desktop layout");
     await page.goto(PATH);
-    await expect(page.getByRole("link", { name: "Buy on WhatsApp" })).toContainText("Buy on WhatsApp");
-    const box = (await page.getByRole("link", { name: "Buy on WhatsApp" }).boundingBox())!;
+    await expect(page.getByRole("link", { name: "Buy via WhatsApp" })).toContainText("Buy via WhatsApp");
+    const box = (await page.getByRole("link", { name: "Buy via WhatsApp" }).boundingBox())!;
     expect(box.width).toBeGreaterThan(120);
   });
 });

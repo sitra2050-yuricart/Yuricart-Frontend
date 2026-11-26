@@ -387,7 +387,7 @@ export default function ProductDetails({
       </div>
 
       {/* ---------- Right: buy box ---------- */}
-      <div className="w-full pb-28 md:w-[25%] md:pb-0">
+      <div className="w-full pb-36 md:w-[25%] md:pb-0">
         <div className="md:sticky md:top-40">
           {isOutOfStock ? (
             <BackInStockNotificationButton
@@ -395,7 +395,7 @@ export default function ProductDetails({
               className="h-12 w-full rounded-xl bg-primary text-[15px] font-semibold hover:bg-primary/90"
             />
           ) : priceUnavailable ? (
-            <div className="fixed inset-x-0 bottom-[3.3rem] z-40 flex border-t border-gray-200 bg-white/95 p-2 shadow-[0_-8px_24px_-12px_rgba(16,24,40,0.25)] backdrop-blur md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
+            <div className="fixed inset-x-0 bottom-[61px] z-40 flex border-t border-gray-200 bg-white/95 p-2 shadow-[0_-8px_24px_-12px_rgba(16,24,40,0.25)] backdrop-blur md:static md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
               <WhatsAppOrderButton
                 phoneNumber={whatsappNumber}
                 productName={product.name ?? "Unnamed Product"}
@@ -408,12 +408,12 @@ export default function ProductDetails({
               />
             </div>
           ) : (
-            <div className="fixed inset-x-0 bottom-[3.3rem] z-40 flex gap-2 border-t border-gray-200 bg-white/95 p-2 shadow-[0_-8px_24px_-12px_rgba(16,24,40,0.25)] backdrop-blur md:static md:flex-col md:gap-3 md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
+            <div className="fixed inset-x-0 bottom-[61px] z-40 flex gap-2 border-t border-gray-200 bg-white/95 p-2 shadow-[0_-8px_24px_-12px_rgba(16,24,40,0.25)] backdrop-blur md:static md:flex-col md:gap-3 md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none">
               <AddToCartButton
                 product={apiProduct}
                 selectedOptions={selectedOptions}
                 quantity={quantity}
-                className={cn(BUY_BUTTON, "bg-primary hover:bg-primary/90")}
+                className={cn(BUY_BUTTON, "min-w-0 gap-1.5 bg-primary px-2 text-[13px] hover:bg-primary/90 max-[359px]:[&_svg]:hidden md:gap-2 md:px-4 md:text-[15px] md:[&_svg]:size-4")}
               />
               <WhatsAppOrderButton
                 phoneNumber={whatsappNumber}
@@ -422,16 +422,19 @@ export default function ProductDetails({
                 quantity={quantity}
                 salePrice={getProductEffectivePrice(apiProduct)}
                 deliveryLocation={location}
-                label="Buy on WhatsApp"
-                iconOnlyOnMobile
-                className="h-12 w-12 shrink-0 gap-0 rounded-xl bg-whatsapp px-0 text-[15px] font-semibold shadow-sm hover:bg-whatsapp/90 md:w-full md:gap-2 md:px-4"
+                label="Buy via WhatsApp"
+                className="h-12 min-w-0 flex-[1.5] gap-1.5 whitespace-nowrap rounded-xl bg-whatsapp px-2 text-[13px] font-semibold shadow-sm hover:bg-whatsapp/90 max-[359px]:[&_svg]:hidden [&_svg]:size-4 md:w-full md:flex-none md:gap-2 md:px-4 md:text-[15px] md:[&_svg]:size-5"
               />
               <BuyNowButton
                 product={apiProduct}
                 selectedOptions={selectedOptions}
                 quantity={quantity}
                 variant="default"
-                className={cn(BUY_BUTTON, "bg-cta hover:bg-cta/90")}
+                iconOnlyOnMobile
+                className={cn(
+                  BUY_BUTTON,
+                  "w-12 flex-none gap-0 bg-cta px-0 hover:bg-cta/90 md:w-full md:gap-3 md:px-4",
+                )}
               />
             </div>
           )}
