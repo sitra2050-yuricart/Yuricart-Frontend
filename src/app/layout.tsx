@@ -11,6 +11,7 @@ import AppChrome from "@/components/AppChrome";
 import MetaPixel from "@/components/MetaPixel";
 import Script from "next/script";
 import NextTopLoader from "nextjs-toploader";
+import { Analytics } from "@vercel/analytics/next";
 import { getSiteUrl } from "@/lib/seo";
 
 const sourceSans = Source_Sans_3({
@@ -133,6 +134,7 @@ export default function RootLayout({
             </AppChrome>
           </ReactQueryProvider>
           <Toaster />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
